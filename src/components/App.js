@@ -1,5 +1,6 @@
 import React, { Component } from 'react';
 import { Route } from 'react-router-dom';
+import CssBaseline from '@material-ui/core/CssBaseline';
 
 import Home from "./Home"
 import TopVote from "./TopVote"
@@ -7,10 +8,13 @@ import Search from "./Search"
 import Login from "./Login"
 import MainLayout from "./Layout/MainLayout"
 
-class Routes extends Component {
+import '../styles/App.css';
+
+class App extends Component {
   render() {
     return(
       <React.Fragment>
+        <CssBaseline />
         <Route exact path="/" component={ (props) =>
           <MainLayout><Home/></MainLayout>
         }/>
@@ -29,4 +33,4 @@ class Routes extends Component {
 
 }
 
-export default Routes;
+export default App;
