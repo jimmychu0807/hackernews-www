@@ -1,12 +1,13 @@
 import React, { Component } from 'react';
+import Grid from '@material-ui/core/Grid';
 
 class Login extends Component {
 
   render() {
     return(
-      <React.Fragment>
+      <Grid item xs={12}>
         <div>Login</div>
-      </React.Fragment>
+      </Grid>
     )
   }
 

@@ -5,11 +5,9 @@ class Home extends Component {
 
   render() {
     return(
-      <React.Fragment>
-        <Grid item xs={12}>
-          <div>Home</div>
-        </Grid>
-      </React.Fragment>
+      <Grid item xs={12}>
+        <div>Home</div>
+      </Grid>
     )
   }
 

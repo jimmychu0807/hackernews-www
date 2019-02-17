@@ -7,8 +7,14 @@ import Header from '../Header';
 import Footer from '../Footer';
 
 const styles = theme => ({
-  root: {
+  header: {
+
+  },
+  mainBody: {
     flexGrow: 1,
+  },
+  footer: {
+
   },
 });
 
@@ -20,11 +26,11 @@ class MainLayout extends Component {
 
     return(
       <React.Fragment>
-        <Header/>
-        <Grid container className={classes.root} spacing={16}>
+        <Header className={ classes.header } />
+        <Grid container className={classes.mainBody} spacing={16}>
           { this.props.children }
         </Grid>
-        <Footer/>
+        <Footer className={ classes.footer } />
       </React.Fragment>
     )
   }
