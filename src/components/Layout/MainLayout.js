@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import { withStyles } from '@material-ui/core/styles';
-import Grid from '@material-ui/core/Grid';
+import { Paper } from '@material-ui/core';
 
 import Header from '../Header';
 import Footer from '../Footer';
@@ -11,6 +11,8 @@ const styles = theme => ({
 
   },
   mainBody: {
+    margin: theme.spacing.unit,
+    padding: theme.spacing.unit * 3,
     flexGrow: 1,
   },
   footer: {
@@ -27,9 +29,9 @@ class MainLayout extends Component {
     return(
       <React.Fragment>
         <Header className={ classes.header } />
-        <Grid container className={classes.mainBody} spacing={16}>
+        <Paper className = { classes.mainBody } >
           { this.props.children }
-        </Grid>
+        </Paper>
         <Footer className={ classes.footer } />
       </React.Fragment>
     )

@@ -1,16 +1,31 @@
 import React, { Component } from 'react';
-import Grid from '@material-ui/core/Grid';
+import { Query } from "react-apollo";
+import gql from "graphql-tag";
+
+import Link from './Link';
+
+const LINKSQUERY = gql`query linksQuery {
+  allLinks {
+    nodes {
+      id url description
+      user { id name }
+    }
+  }
+}`;
 
 class Home extends Component {
-
   render() {
     return(
-      <Grid item xs={12}>
-        <div>Home</div>
-      </Grid>
+      <Query query={LINKSQUERY}>
+        {({ loading, error, data }) => {
+          if (loading) return <p>Loading...</p>;
+          if (error) return <p>Error :(</p>;
+          return data.allLinks.nodes.map((link, ind) =>
+            <Link key={link.id} ind={ind} link={link}/>)
+        } }
+      </Query>
     )
   }
-
 }
 
 export default Home;
