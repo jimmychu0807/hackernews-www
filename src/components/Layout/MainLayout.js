@@ -3,8 +3,8 @@ import PropTypes from 'prop-types';
 import { withStyles } from '@material-ui/core/styles';
 import { Paper } from '@material-ui/core';
 
-import Header from '../Header';
-import Footer from '../Footer';
+import Header from './Header';
+import Footer from './Footer';
 
 const styles = theme => ({
   header: {
