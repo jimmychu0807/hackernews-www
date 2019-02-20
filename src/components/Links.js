@@ -23,8 +23,6 @@ class Links extends Component {
     const { linksOrder } = this.props;
     const queryVars = this.getQueryVarsFromParam(linksOrder);
 
-    console.log(queryVars);
-
     return(
       <Query query={LINKSQUERY} variables={queryVars}>
         {({ loading, error, data }) => {
