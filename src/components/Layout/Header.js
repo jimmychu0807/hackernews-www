@@ -1,9 +1,9 @@
-import React, { Component } from 'react';
-import { Link } from 'react-router-dom';
-import { AppBar, Toolbar, IconButton, Typography, Button, InputBase
-  } from '@material-ui/core';
-import { Search as SearchIcon, AccountCircle
-  } from '@material-ui/icons';
+import React, { Component, Fragment } from 'react';
+import { Link, withRouter } from 'react-router-dom';
+import { AppBar, Toolbar, IconButton, Typography, Button, InputBase,
+  Menu, MenuItem
+} from '@material-ui/core';
+import { Search as SearchIcon, AccountCircle } from '@material-ui/icons';
 import { withStyles } from '@material-ui/core/styles';
 import { fade } from '@material-ui/core/styles/colorManipulator';
 
@@ -64,18 +64,33 @@ const styles = theme => ({
 });
 
 class Header extends Component {
-  state = {
-    loggedIn: false,
-    appTitle: "Hacker News",
-    anchorAccountMenu: null,
-  };
+  constructor(props) {
+    super(props);
 
-  render() {
-    const { appTitle, anchorAccountMenu } = this.state;
+    this.state = {
+      appTitle: "Hacker News",
+      anchorAccountMenu: null,
+    };
+  }
+
+  handleMenuClose = ev => {
+    this.setState({ anchorAccountMenu: null });
+  }
+
+  handleLogout = ev => {
+    this.handleMenuClose(ev);
+
+    localStorage.removeItem('userToken');
+    localStorage.removeItem('user');
+
+    // Redirection
+    const { history } = this.props;
+    history.push("/");
+  }
+
+  renderSearch = () => {
     const { classes } = this.props;
-    const open = Boolean(anchorAccountMenu);
-
-    const renderSearch = (
+    return(
       <div className={classes.search}>
         <div className={classes.searchIcon}>
           <SearchIcon />
@@ -88,37 +103,68 @@ class Header extends Component {
           }}
         />
       </div>
-    );
+    )
+  }
 
-    const renderAccountMenu = (
-      <Link to="/login" className={ this.props.classes.menuBarText }>
+  renderAccountMenuLoggedIn = (user) => {
+    let { anchorAccountMenu } = this.state;
+    return(
+      <Fragment>
+        {`${user.name}`}
         <IconButton
-          aria-owns={ open ? 'menu-appbar' : null }
+          aria-owns={ !!anchorAccountMenu ? 'menu-appbar' : null }
           aria-haspopup="true" color="inherit"
+          onClick={ (ev) => this.setState({ anchorAccountMenu: ev.currentTarget }) }>
+          <AccountCircle/>
+        </IconButton>
+        <Menu
+          id="user-menu" anchorEl={ anchorAccountMenu }
+          open={ !!anchorAccountMenu } onClose={ this.handleMenuClose }
         >
+          <MenuItem onClick={ this.handleMenuClose }>Profile</MenuItem>
+          <MenuItem onClick={ this.handleLogout }>Logout</MenuItem>
+        </Menu>
+      </Fragment>
+    )
+  }
+
+  renderAccountMenuBeforeLogIn = () => {
+    const { anchorAccountMenu } = this.state;
+    const { classes } = this.props;
+    return(
+      <Link to="/login" className={ classes.menuBarText }>
+        <IconButton
+          aria-owns={ !!anchorAccountMenu ? 'menu-appbar' : null }
+          aria-haspopup="true" color="inherit">
           <AccountCircle/>
         </IconButton>
       </Link>
-    );
+    )
+  }
+
+  render() {
+    const { appTitle } = this.state;
+    const { classes } = this.props;
+
+    let user = !!localStorage.getItem('user') &&
+      JSON.parse(localStorage.getItem('user'));
 
     return(
       <AppBar position="static">
         <Toolbar>
           <Typography variant="h6" color="inherit" className={classes.grow}>
-            <Link to="/" className={ this.props.classes.menuBarText }>{ appTitle }</Link>
+            <Link to="/" className={ classes.menuBarText }>{ appTitle }</Link>
           </Typography>
 
           <Button variant="contained" color="secondary" className={classes.button}>
-            <Link to="/top-vote" className={ this.props.classes.menuBarText }>
-              Top Vote
-            </Link>
+            <Link to="/top-vote" className={ classes.menuBarText }>Top Vote</Link>
           </Button>
-          { renderSearch }
-          { renderAccountMenu }
+          { this.renderSearch() }
+          { user ? this.renderAccountMenuLoggedIn(user) : this.renderAccountMenuBeforeLogIn() }
         </Toolbar>
       </AppBar>
     )
   }
 }
 
-export default withStyles(styles)(Header);
+export default withRouter(withStyles(styles)(Header));

@@ -13,10 +13,7 @@ class Link extends Component {
       <div>
         <span>{ind}.</span>
         <a href={link.url} target="_blank" rel="noopener noreferrer">{link.description}</a>
-        <span>{ this.getDomain(link.url) }</span>
-        <div>
-          by { linkOwner.name }
-        </div>
+        <div>by { linkOwner.name }</div>
         <div>Vote: { link.votesCount }</div>
         <div>Submitted At: { link.createdAt }</div>
       </div>
