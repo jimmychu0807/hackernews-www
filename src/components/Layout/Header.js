@@ -11,6 +11,10 @@ import { Search as SearchIcon, AccountCircle } from '@material-ui/icons';
 import { withStyles } from '@material-ui/core/styles';
 import { fade } from '@material-ui/core/styles/colorManipulator';
 
+// services
+import UserService from '../../services/UserService';
+
+
 const styles = theme => ({
   button: {
     margin: theme.spacing.unit,
@@ -83,15 +87,8 @@ class Header extends Component {
 
   handleLogout = ev => {
     this.handleMenuClose(ev);
-    localStorage.removeItem('user');
-
-    // clear apollo cache
-    let { client: apolloClient } = this.props;
-    apolloClient.resetStore();
-
-    // Redirection
-    const { history } = this.props;
-    history.push("/");
+    UserService.logout();
+    this.props.history.push("/");
   }
 
   renderSearch = () => {
@@ -151,9 +148,7 @@ class Header extends Component {
   render() {
     const { appTitle } = this.state;
     const { classes } = this.props;
-
-    let user = !!localStorage.getItem('user') &&
-      JSON.parse(localStorage.getItem('user'));
+    const user = UserService.currentUser();
 
     return(
       <AppBar position="static">
@@ -166,7 +161,7 @@ class Header extends Component {
             <Link to="/top-vote" className={ classes.menuBarText }>Top Vote</Link>
           </Button>
           { this.renderSearch() }
-          { user ? this.renderAccountMenuLoggedIn(user.data) : this.renderAccountMenuBeforeLogIn() }
+          { user ? this.renderAccountMenuLoggedIn(user) : this.renderAccountMenuBeforeLogIn() }
         </Toolbar>
       </AppBar>
     )

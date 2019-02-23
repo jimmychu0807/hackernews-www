@@ -1,12 +1,15 @@
 // core/data components
 import React, { Component, Fragment } from 'react';
 import { Link } from 'react-router-dom';
-import { Mutation, withApollo } from "react-apollo";
+import { Mutation } from "react-apollo";
 import gql from "graphql-tag";
 
 // styling components
 import { TextField, Button, Typography } from '@material-ui/core';
 import { withStyles } from '@material-ui/core/styles';
+
+// services
+import UserService from '../services/UserService';
 
 const styles = theme => ({
   form: {
@@ -72,16 +75,8 @@ class LoginSignup extends Component {
 
     // Login correct
     this.setState({ showLoginError: false });
-    let user = { token: result.token, data: result.user }
-    localStorage.setItem('user', JSON.stringify(user));
-
-    // Clear the apollo cache
-    let { client: apolloClient } = this.props;
-    apolloClient.resetStore();
-
-    // Redirection
-    const { history } = this.props;
-    history.push("/");
+    UserService.login(result.token, result.user)
+    this.props.history.push("/");
   }
 
   handleSignUp = signUpFunc => async ev => {
@@ -93,16 +88,8 @@ class LoginSignup extends Component {
 
     // Login correct
     this.setState({ showLoginError: false });
-    let user = { token: result.token, data: result.user }
-    localStorage.setItem('user', JSON.stringify(user));
-
-    // Clear the apollo cache
-    let { client: apolloClient } = this.props;
-    apolloClient.resetStore();
-
-    // Redirection
-    const { history } = this.props;
-    history.push("/");
+    UserService.login(result.token, result.user);
+    this.props.history.push("/");
   }
 
   renderLoginForm = () => {
@@ -177,4 +164,4 @@ class LoginSignup extends Component {
   }
 }
 
-export default withApollo(withStyles(styles)(LoginSignup));
+export default withStyles(styles)(LoginSignup);
