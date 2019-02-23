@@ -4,7 +4,7 @@ import { Switch, Route } from 'react-router-dom';
 const MainLayout = lazy(() => import("../components/Layout/MainLayout"));
 const Links = lazy(() => import("../components/Links"));
 const Search = lazy(() => import("../components/Search"));
-const Login = lazy(() => import("../components/Login"));
+const LoginSignup = lazy(() => import("../components/LoginSignup"));
 
 export default function Routing(props) {
   return(
@@ -19,10 +19,10 @@ export default function Routing(props) {
         <MainLayout><Search/></MainLayout>
       }/>
       <Route path="/login" render={ props =>
-        <MainLayout><Login {...props} displayType="login"/></MainLayout>
+        <MainLayout><LoginSignup {...props} displayType="login"/></MainLayout>
       }/>
       <Route path="/signup" render={ props =>
-        <MainLayout><Login {...props} displayType="signup"/></MainLayout>
+        <MainLayout><LoginSignup {...props} displayType="signup"/></MainLayout>
       }/>
     </Switch>
   )

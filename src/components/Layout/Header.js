@@ -1,5 +1,9 @@
+// core/data components
 import React, { Component, Fragment } from 'react';
 import { Link, withRouter } from 'react-router-dom';
+import { withApollo } from "react-apollo";
+
+// styling components
 import { AppBar, Toolbar, IconButton, Typography, Button, InputBase,
   Menu, MenuItem
 } from '@material-ui/core';
@@ -80,6 +84,10 @@ class Header extends Component {
   handleLogout = ev => {
     this.handleMenuClose(ev);
     localStorage.removeItem('user');
+
+    // clear apollo cache
+    let { client: apolloClient } = this.props;
+    apolloClient.resetStore();
 
     // Redirection
     const { history } = this.props;
@@ -165,4 +173,4 @@ class Header extends Component {
   }
 }
 
-export default withRouter(withStyles(styles)(Header));
+export default withApollo(withRouter(withStyles(styles)(Header)));
