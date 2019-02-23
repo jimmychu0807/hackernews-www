@@ -79,8 +79,6 @@ class Header extends Component {
 
   handleLogout = ev => {
     this.handleMenuClose(ev);
-
-    localStorage.removeItem('userToken');
     localStorage.removeItem('user');
 
     // Redirection
@@ -160,7 +158,7 @@ class Header extends Component {
             <Link to="/top-vote" className={ classes.menuBarText }>Top Vote</Link>
           </Button>
           { this.renderSearch() }
-          { user ? this.renderAccountMenuLoggedIn(user) : this.renderAccountMenuBeforeLogIn() }
+          { user ? this.renderAccountMenuLoggedIn(user.data) : this.renderAccountMenuBeforeLogIn() }
         </Toolbar>
       </AppBar>
     )

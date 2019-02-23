@@ -63,8 +63,8 @@ class Login extends Component {
 
     // Login correct
     this.setState({ showLoginError: false });
-    localStorage.setItem('userToken', userSignIn.token);
-    localStorage.setItem('user', JSON.stringify(userSignIn.user));
+    let user = { token: userSignIn.token, data: userSignIn.user }
+    localStorage.setItem('user', JSON.stringify(user));
 
     // Redirection
     const { history } = this.props;
