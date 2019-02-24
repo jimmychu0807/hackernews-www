@@ -9,6 +9,7 @@ const CONFIG = {
     GRAPHQL_ENDPOINT: "http://localhost:3000/graphql",
   },
   production: {
+    GRAPHQL_ENDPOINT: "https://jimmychu0807-hackernews-api.herokuapp.com/graphql",
   }
 }
 
