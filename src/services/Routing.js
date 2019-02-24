@@ -5,6 +5,8 @@ const MainLayout = lazy(() => import("../components/Layout/MainLayout"));
 const Links = lazy(() => import("../components/Links"));
 const Search = lazy(() => import("../components/Search"));
 const LoginSignup = lazy(() => import("../components/LoginSignup"));
+const SubmitLink = lazy(() => import("../components/SubmitLink"));
+const NoMatch = lazy(() => import("../components/NoMatch"));
 
 export default function Routing(props) {
   return(
@@ -12,17 +14,23 @@ export default function Routing(props) {
       <Route exact path="/" render={ props =>
         <MainLayout><Links {...props} linksOrder="byCreatedAt-desc"/></MainLayout>
       }/>
-      <Route path="/top-vote" render={ props =>
+      <Route exact path="/top-vote" render={ props =>
         <MainLayout><Links {...props} linksOrder="byVotesCount-desc"/></MainLayout>
       }/>
-      <Route path="/search" render={ props =>
+      <Route exact path="/search" render={ props =>
         <MainLayout><Search/></MainLayout>
       }/>
-      <Route path="/login" render={ props =>
+      <Route exact path="/login" render={ props =>
         <MainLayout><LoginSignup {...props} displayType="login"/></MainLayout>
       }/>
-      <Route path="/signup" render={ props =>
+      <Route exact path="/signup" render={ props =>
         <MainLayout><LoginSignup {...props} displayType="signup"/></MainLayout>
+      }/>
+      <Route exact path="/submit-link" render={ props =>
+        <MainLayout><SubmitLink {...props} /></MainLayout>
+      }/>
+      <Route render = { props =>
+        <MainLayout><NoMatch /></MainLayout>
       }/>
     </Switch>
   )

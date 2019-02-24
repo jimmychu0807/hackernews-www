@@ -11,7 +11,7 @@ class Link extends Component {
     const linkOwner = link.user
     return (
       <div>
-        <span>{ind}.</span>
+        <span>{ind + 1}.</span>
         <a href={link.url} target="_blank" rel="noopener noreferrer">{link.description}</a>
         <div>by { linkOwner.name }</div>
         <div>Vote: { link.votesCount }</div>

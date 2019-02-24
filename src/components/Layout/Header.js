@@ -160,6 +160,9 @@ class Header extends Component {
           <Button variant="contained" color="secondary" className={classes.button}>
             <Link to="/top-vote" className={ classes.menuBarText }>Top Vote</Link>
           </Button>
+          <Button variant="contained" color="secondary" className={classes.button}>
+            <Link to="/submit-link" className={ classes.menuBarText }>Submit</Link>
+          </Button>
           { this.renderSearch() }
           { user ? this.renderAccountMenuLoggedIn(user) : this.renderAccountMenuBeforeLogIn() }
         </Toolbar>
