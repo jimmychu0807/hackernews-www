@@ -5,6 +5,13 @@ import { LINKS_QUERY_GQL } from './gql';
 import Link from './Link';
 import { getQueryVarsFromParam } from '../services/HelperMethods';
 
+// Styling
+import { withStyles } from '@material-ui/core/styles';
+
+const styles = theme => ({
+
+});
+
 class Links extends Component {
 
   render() {
@@ -24,4 +31,4 @@ class Links extends Component {
   }
 }
 
-export default Links;
+export default withStyles(styles)(Links);

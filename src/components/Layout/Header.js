@@ -14,8 +14,10 @@ import { fade } from '@material-ui/core/styles/colorManipulator';
 // services
 import UserService from '../../services/UserService';
 
-
 const styles = theme => ({
+  appBar: {
+    position: "fixed",
+  },
   button: {
     margin: theme.spacing.unit,
   },
@@ -23,8 +25,8 @@ const styles = theme => ({
     marginLeft: -12,
     marginRight: 20,
   },
-  grow: {
-    flexGrow: 1,
+  title: {
+    flex: 1,
   },
   menuBarText: {
     color: theme.palette.common.white,
@@ -151,16 +153,16 @@ class Header extends Component {
     const user = UserService.currentUser();
 
     return(
-      <AppBar position="static">
+      <AppBar className={ classes.appBar }>
         <Toolbar>
-          <Typography variant="h6" color="inherit" className={classes.grow}>
+          <Typography variant="h6" color="inherit" className={classes.title}>
             <Link to="/" className={ classes.menuBarText }>{ appTitle }</Link>
           </Typography>
 
-          <Button variant="contained" color="secondary" className={classes.button}>
+          <Button>
             <Link to="/top-vote" className={ classes.menuBarText }>Top Vote</Link>
           </Button>
-          <Button variant="contained" color="secondary" className={classes.button}>
+          <Button>
             <Link to="/submit-link" className={ classes.menuBarText }>Submit</Link>
           </Button>
           { this.renderSearch() }

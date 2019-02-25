@@ -1,22 +1,24 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import { withStyles } from '@material-ui/core/styles';
-import { Paper } from '@material-ui/core';
 
 import Header from './Header';
 import Footer from './Footer';
 
 const styles = theme => ({
-  header: {
-
+  layout: {
+    display: "flex",
+    minHeight: "100vh",
+    flexDirection: "column",
+    justifyContent: "space-between",
+    alignItems: "center"
   },
+
   mainBody: {
-    margin: theme.spacing.unit,
+    margin: "80px 16px 0",
+    width: "100%",
     padding: theme.spacing.unit * 3,
-    flexGrow: 1,
-  },
-  footer: {
-
+    flex: 1,
   },
 });
 
@@ -27,13 +29,13 @@ class MainLayout extends Component {
     const { classes } = this.props;
 
     return(
-      <React.Fragment>
-        <Header className={ classes.header } />
-        <Paper className = { classes.mainBody } >
+      <div className = { classes.layout }>
+        <Header />
+        <main className = { classes.mainBody } >
           { this.props.children }
-        </Paper>
-        <Footer className={ classes.footer } />
-      </React.Fragment>
+        </main>
+        <Footer />
+      </div>
     )
   }
 };
