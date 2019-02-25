@@ -1,11 +1,15 @@
 // core/data components
 import React, { Component, Fragment } from 'react';
-import { Mutation, withApollo } from "react-apollo";
-import gql from "graphql-tag";
+import { Mutation } from "react-apollo";
 
 // styling
 import { Typography, TextField, Button } from '@material-ui/core';
 import { withStyles } from '@material-ui/core/styles';
+
+// app libraries
+import { SUBMIT_LINK_GQL, LINKS_QUERY_GQL } from './gql';
+import { defaultLinksOrder } from '../services/Routing';
+import { getQueryVarsFromParam } from '../services/HelperMethods';
 
 const styles = theme => ({
   button: {
@@ -28,13 +32,6 @@ const styles = theme => ({
   },
 });
 
-const SUBMIT_LINK_GQL = gql`mutation submitLink($url: String!, $description: String) {
-  createLink(url: $url, description: $description) {
-    errors
-    link { id url description }
-  }
-}`;
-
 class SubmitLink extends Component {
   constructor(props) {
     super(props);
@@ -48,26 +45,24 @@ class SubmitLink extends Component {
     this.setState({ [name]: ev.target.value });
   }
 
-  handleSubmitLink = submitFunc => async ev => {
-    ev.preventDefault();
-    let { url, description } = this.state;
-
-    await submitFunc({ variables: { url, description }});
-
-    // Redirection
-    this.props.history.push("/");
-  }
-
   render() {
     let { classes } = this.props;
+    let { url, description } = this.state;
 
     return(
       <Fragment>
         <div>
           <Typography variant="h6">Share New Website</Typography>
         </div>
-        <Mutation mutation={ SUBMIT_LINK_GQL}>{ (submitFunc, { loading, error}) => (
-          <form onSubmit={ this.handleSubmitLink(submitFunc) }>
+        <Mutation
+          mutation={ SUBMIT_LINK_GQL }
+          variables= {{ url, description }}
+          refetchQueries={ [{
+            query: LINKS_QUERY_GQL,
+            variables: getQueryVarsFromParam(defaultLinksOrder) }] }
+          onCompleted={ (data) => this.props.history.push("/") }
+          >{ (submitFunc, { loading, error}) => (
+          <form onSubmit={ ev => { ev.preventDefault(); submitFunc() } }>
             <TextField
               id="url"
               label="URL"
@@ -96,4 +91,4 @@ class SubmitLink extends Component {
   }
 }
 
-export default withApollo(withStyles(styles)(SubmitLink));
+export default withStyles(styles)(SubmitLink);

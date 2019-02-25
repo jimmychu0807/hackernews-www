@@ -1,30 +1,18 @@
 import React, { Component } from 'react';
 import { Query } from "react-apollo";
-import gql from "graphql-tag";
 
+import { LINKS_QUERY_GQL } from './gql';
 import Link from './Link';
-
-const LINKSQUERY = gql`query linksQuery($sortBy: String, $desc: Boolean) {
-  allLinks(sortBy: $sortBy, desc: $desc) {
-    nodes {
-      id url description votesCount createdAt
-      user { id name }
-    }
-  }
-}`;
+import { getQueryVarsFromParam } from '../services/HelperMethods';
 
 class Links extends Component {
-  getQueryVarsFromParam = (param) => {
-    let res = param.split("-");
-    return { sortBy: res[0], desc: (res[1] === "desc") };
-  }
 
   render() {
     const { linksOrder } = this.props;
-    const queryVars = this.getQueryVarsFromParam(linksOrder);
+    const queryVars = getQueryVarsFromParam(linksOrder);
 
     return(
-      <Query query={LINKSQUERY} variables={queryVars}>
+      <Query query={LINKS_QUERY_GQL} variables={queryVars}>
         {({ loading, error, data }) => {
           if (loading) return <p>Loading...</p>;
           if (error) return <p>Error :(</p>;

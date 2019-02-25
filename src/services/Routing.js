@@ -8,17 +8,19 @@ const LoginSignup = lazy(() => import("../components/LoginSignup"));
 const SubmitLink = lazy(() => import("../components/SubmitLink"));
 const NoMatch = lazy(() => import("../components/NoMatch"));
 
+export const defaultLinksOrder = "byCreatedAt-desc"
+
 export default function Routing(props) {
   return(
     <Switch>
       <Route exact path="/" render={ props =>
-        <MainLayout><Links {...props} linksOrder="byCreatedAt-desc"/></MainLayout>
+        <MainLayout><Links {...props} linksOrder={ defaultLinksOrder }/></MainLayout>
       }/>
       <Route exact path="/top-vote" render={ props =>
         <MainLayout><Links {...props} linksOrder="byVotesCount-desc"/></MainLayout>
       }/>
       <Route exact path="/search" render={ props =>
-        <MainLayout><Search/></MainLayout>
+        <MainLayout><Search defaultLinksOrder={ defaultLinksOrder }/></MainLayout>
       }/>
       <Route exact path="/login" render={ props =>
         <MainLayout><LoginSignup {...props} displayType="login"/></MainLayout>

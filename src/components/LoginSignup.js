@@ -2,7 +2,6 @@
 import React, { Component, Fragment } from 'react';
 import { Link } from 'react-router-dom';
 import { Mutation } from "react-apollo";
-import gql from "graphql-tag";
 
 // styling components
 import { TextField, Button, Typography } from '@material-ui/core';
@@ -10,6 +9,7 @@ import { withStyles } from '@material-ui/core/styles';
 
 // services
 import UserService from '../services/UserService';
+import { LOGIN_GQL, SIGNUP_GQL } from './gql.js';
 
 const styles = theme => ({
   form: {
@@ -26,20 +26,6 @@ const styles = theme => ({
     width: 200,
   }
 });
-
-const LOGIN_GQL = gql`mutation userSignIn($email: String!, $password: String!) {
-  userSignIn(email: $email, password: $password) {
-    token
-    user { id name email }
-  }
-}`;
-
-const SIGNUP_GQL = gql`mutation user($name: String!, $email: String!, $password: String!) {
-  createUser(name: $name, email: $email, password: $password) {
-    errors
-    user { id name email }
-  }
-}`;
 
 const DISPLAY_TYPES = ["login", "signup"]
 
