@@ -5,9 +5,12 @@ import { Mutation } from "react-apollo";
 
 // styling components
 import {
-  TextField, Button, Typography, Paper, Avatar
+  TextField, Button, Typography, Paper, Avatar,
+  Icon
 } from '@material-ui/core';
+import { loadCSS } from 'fg-loadcss/src/loadCSS';
 import { withStyles } from '@material-ui/core/styles';
+import clsx from 'clsx';
 import { LockOutlined as LockOutlinedIcon } from '@material-ui/icons';
 
 // services
@@ -40,6 +43,9 @@ const styles = theme => {
       margin: theme.spacing.unit,
       backgroundColor: theme.palette.secondary.light,
     },
+    icon: {
+      color: "white",
+    },
     title: {
       marginTop: theme.spacing.unit * 2,
       marginBottom: theme.spacing.unit,
@@ -70,13 +76,19 @@ class LoginSignup extends Component {
       password: "",
       confirmPassword: "",
       showLoginError: false,
+      showSignupError: false,
     }
   }
 
-  handleChange = type => ev => {
+  componentDidMount() {
+    loadCSS("https://use.fontawesome.com/releases/v5.7.2/css/all.css",
+      document.querySelector("#insertion-point-jss"));
+  }
+
+  handleChange = ({ type, errMsgType }) => ev => {
     this.setState({
       [type]: ev.target.value,
-      showLoginError: false,
+      [errMsgType]: false,
     });
   }
 
@@ -96,15 +108,14 @@ class LoginSignup extends Component {
     this.props.history.push("/");
   }
 
-  handleSignUp = signUpFunc => async ev => {
-    let { name, email, password } = this.state;
+  handleSignup = gqlFunc => async ev => {
     ev.preventDefault();
-    let { data: { createUser: result } } = await signUpFunc({ variables: { name, email, password } });
-
     // TODO: Handle signup error, password != confirmPassword, etc
 
+    let { data: { createUser: result } } = await gqlFunc();
+
     // Login correct
-    this.setState({ showLoginError: false });
+    this.setState({ showSignupError: false });
     UserService.login(result.token, result.user);
     this.props.history.push("/");
   }
@@ -126,18 +137,22 @@ class LoginSignup extends Component {
             <TextField id="email" label="E-mail" type="email"
               required fullWidth autoFocus
               margin="normal" autoComplete="email"
-              value={ email } onChange={ this.handleChange('email') }/>
+              value={ email }
+              onChange={ this.handleChange({ type: 'email', errMsgType: 'showLoginError' }) }/>
             <TextField id="password" label="Password" type="password"
               required fullWidth
               margin="normal" autoComplete="password"
-              value={ password } onChange={ this.handleChange('password') }/>
+              value={ password }
+              onChange={ this.handleChange({ type: 'password', errMsgType: 'showLoginError' }) }/>
             <Button className={ classes.submit } type="submit" variant="contained"
               fullWidth size="large" disabled={ loading }
               color="primary">{ loading ? "Loading..." : "Log In" }</Button>
+
             { showLoginError &&
               <Typography align="center" className={ classes.errorMsg }>
                 Incorrect login. Please try again.
               </Typography> }
+
           </form>
         ) }</Mutation>
         <Link to="/signup">Sign up for an account</Link>
@@ -147,36 +162,58 @@ class LoginSignup extends Component {
 
   renderSignupForm = () => {
     const { classes } = this.props;
-    const { name, email, password, confirmPassword } = this.state;
+    const { name, email, password, confirmPassword, showSignupError } = this.state;
 
-    return(
-      <Mutation mutation={SIGNUP_GQL}>{ (signUpFunc, { loading, error }) => (
-        <Fragment>
-          <Typography variant="h4" gutterBottom>Sign Up</Typography>
-          <form id="signup-form" autoComplete="off" className={ classes.form }
-            onSubmit={ this.handleSignUp(signUpFunc) }>
-            <TextField id="login-name" className={classes.textField}
-              label="Name" margin="normal"
-              value={ name } onChange={ this.handleChange('name') } />
-            <TextField id="login-email" className={classes.textField}
-              label="Login Email" margin="normal"
-              value={ email } onChange={ this.handleChange('email') } />
-            <TextField id="password" className={classes.textField}
-              label="Password" type="password"
-              margin="normal" autoComplete="login-password"
-              value={ password } onChange={ this.handleChange('password') } />
-            <TextField id="confirm-password" className={classes.textField}
-              label="Confirm Password" type="password"
-              margin="normal" autoComplete="off"
-              value={ confirmPassword } onChange={ this.handleChange('confirmPassword') } />
-            <Button disabled={ loading } type="submit"
-              variant="contained" color="primary">
-              { loading ? "Loading..." : "Sign Up" }</Button>
+    return(<section className={ classes.section }>
+      <Paper className={ classes.paper }>
+        <Avatar className={ classes.avatar }>
+          <Icon className={ clsx(classes.icon, 'far fa-user fa-fw') } color="secondary"/>
+        </Avatar>
+        <Typography component="h1" variant="h4" className={ classes.title }>Sign Up</Typography>
+        <Mutation
+          mutation={ SIGNUP_GQL }
+          variables={{ name, email, password }}
+          >{ (gqlFunc, { loading }) => (
+          <form id="signup-form" className={ classes.form }
+            onSubmit={ this.handleSignup(gqlFunc) }>
+            <TextField id="name" label="Your Name" type="text"
+              required fullWidth autoFocus
+              margin="normal" autoComplete="name"
+              value={ name }
+              onChange={ this.handleChange({ type: 'name', errMsgType: 'showSignupError' }) } />
+
+            <TextField id="email" label="E-mail" type="email"
+              required fullWidth
+              margin="normal" autoComplete="email"
+              value={ email }
+              onChange={ this.handleChange({ type: 'email', errMsgType: 'showSignupError' }) } />
+
+            <TextField id="password" label="Password" type="password"
+              required fullWidth
+              margin="normal" autoComplete="password"
+              value={ password }
+              onChange={ this.handleChange({ type: 'password', errMsgType: 'showSignupError' }) } />
+
+            <TextField id="confirm-password" label="Confirm Password" type="password"
+              required fullWidth
+              margin="normal" autoComplete="password"
+              value={ confirmPassword }
+              onChange={ this.handleChange({ type: 'confirmPassword', errMsgType: 'showSignupError' }) } />
+
+            <Button className={ classes.submit } type="submit" variant="contained"
+              fullWidth size="large" disabled={ loading }
+              color="primary">{ loading ? "Loading..." : "Sign Up" }</Button>
+
+            { showSignupError &&
+              <Typography align="center" className={ classes.errorMsg }>
+                Incorrect sign up. Please try again.
+              </Typography> }
+
           </form>
-          <Link to="/login">Login with existing account</Link>
-        </Fragment>
-      ) }</Mutation>
-    )
+        ) }</Mutation>
+        <Link to="/login">Log in with an existing account</Link>
+      </Paper>
+    </section>)
   }
 
   render() {
