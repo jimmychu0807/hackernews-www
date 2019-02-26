@@ -10,6 +10,13 @@ const styles = theme => ({
     padding: `${theme.spacing.unit}px ${theme.spacing.unit*2}px ${theme.spacing.unit}px`,
     marginTop: theme.spacing.unit * 3,
   },
+  emoji: {
+    margin: `0 ${theme.spacing.unit}px`,
+  },
+  emphasis: {
+    textDecoration: "none",
+    fontWeight: "bold",
+  }
 });
 
 class Footer extends Component {
@@ -21,7 +28,10 @@ class Footer extends Component {
       <div className={ classes.footer }>
         <hr/>
         <Typography color="textSecondary" align="center" gutterBottom>
-          Built by <a href="https://www.hkwtf.com">WTF Studio</a>
+          Built with
+          <span className={ classes.emoji }>❤️</span>
+          by&nbsp;
+          <a href="https://www.hkwtf.com" className={ classes.emphasis }>WTF Studio</a>
         </Typography>
       </div>
     )

@@ -10,6 +10,7 @@ import { AppBar, Toolbar, IconButton, Typography, Button, InputBase,
 import { Search as SearchIcon, AccountCircle } from '@material-ui/icons';
 import { withStyles } from '@material-ui/core/styles';
 import { fade } from '@material-ui/core/styles/colorManipulator';
+import clsx from 'clsx';
 
 //app components
 import SubmitLink from '../SubmitLink';
@@ -34,6 +35,9 @@ const styles = theme => ({
   menuBarText: {
     color: theme.palette.common.white,
     textDecoration: 'none'
+  },
+  loginBtn: {
+    border: `1px solid rgba(255, 255, 255, 0.7)`
   },
   search: {
     position: 'relative',
@@ -145,12 +149,8 @@ class Header extends Component {
   renderAccountMenuBeforeLogIn = () => {
     const { anchorAccountMenu } = this.state;
     const { classes } = this.props;
-    return (<Link to="/login" className={ classes.menuBarText }>
-      <IconButton
-        aria-owns={ !!anchorAccountMenu ? 'menu-appbar' : null }
-        aria-haspopup="true" color="inherit">
-        <AccountCircle/>
-      </IconButton>
+    return (<Link to="/login">
+      <Button variant="outlined" className={ clsx(classes.menuBarText, classes.loginBtn) }>LOGIN</Button>
     </Link>)
   }
 
@@ -167,9 +167,11 @@ class Header extends Component {
           </Typography>
 
           <Button>
-            <Link to="/top-vote" className={ classes.menuBarText }>Top Vote</Link>
+            <Link to="/top-vote" className={ classes.menuBarText }>
+              Top Vote
+            </Link>
           </Button>
-          <Button onClick = { this.openSubmitLinkDialog }>
+          <Button className= { classes.menuBarText } onClick ={ this.openSubmitLinkDialog }>
             Submit
           </Button>
           { this.renderSearch() }
