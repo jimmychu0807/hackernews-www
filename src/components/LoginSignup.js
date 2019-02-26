@@ -1,5 +1,5 @@
 // core/data components
-import React, { Component, Fragment } from 'react';
+import React, { Component } from 'react';
 import { Link } from 'react-router-dom';
 import { Mutation } from "react-apollo";
 
@@ -8,10 +8,8 @@ import {
   TextField, Button, Typography, Paper, Avatar,
   Icon
 } from '@material-ui/core';
-import { loadCSS } from 'fg-loadcss/src/loadCSS';
 import { withStyles } from '@material-ui/core/styles';
 import clsx from 'clsx';
-import { LockOutlined as LockOutlinedIcon } from '@material-ui/icons';
 
 // services
 import UserService from '../services/UserService';
@@ -80,11 +78,6 @@ class LoginSignup extends Component {
     }
   }
 
-  componentDidMount() {
-    loadCSS("https://use.fontawesome.com/releases/v5.7.2/css/all.css",
-      document.querySelector("#insertion-point-jss"));
-  }
-
   handleChange = ({ type, errMsgType }) => ev => {
     this.setState({
       [type]: ev.target.value,
@@ -126,7 +119,9 @@ class LoginSignup extends Component {
 
     return (<section className={ classes.section }>
       <Paper className={ classes.paper }>
-        <Avatar className={ classes.avatar }><LockOutlinedIcon /></Avatar>
+        <Avatar className={ classes.avatar }>
+          <Icon className={ clsx(classes.icon, "fas fa-fw fa-sign-in-alt") } />
+        </Avatar>
         <Typography component="h1" variant="h4" className={ classes.title }>
           Log In
         </Typography>
@@ -167,7 +162,7 @@ class LoginSignup extends Component {
     return(<section className={ classes.section }>
       <Paper className={ classes.paper }>
         <Avatar className={ classes.avatar }>
-          <Icon className={ clsx(classes.icon, 'far fa-user fa-fw') } color="secondary"/>
+          <Icon className={ clsx(classes.icon, 'far fa-user fa-fw') }/>
         </Avatar>
         <Typography component="h1" variant="h4" className={ classes.title }>Sign Up</Typography>
         <Mutation
@@ -221,9 +216,9 @@ class LoginSignup extends Component {
     if (!DISPLAY_TYPES.includes(displayType)) {
       throw new Error(`Unknown prop displayType: ${displayType}`)
     }
-    return (
-      displayType === "signup" ? this.renderSignupForm() : this.renderLoginForm()
-    )
+    return (<React.Fragment>
+      { displayType === "signup" ? this.renderSignupForm() : this.renderLoginForm() }
+    </React.Fragment>)
   }
 }
 

@@ -4,10 +4,10 @@ import { Link, withRouter } from 'react-router-dom';
 import { withApollo } from "react-apollo";
 
 // styling components
-import { AppBar, Toolbar, IconButton, Typography, Button, InputBase,
-  Menu, MenuItem
+import {
+  AppBar, Toolbar, Typography, Button, InputBase,
+  Menu, MenuItem, Avatar, Icon, ListItemIcon, ListItemText
 } from '@material-ui/core';
-import { Search as SearchIcon, AccountCircle } from '@material-ui/icons';
 import { withStyles } from '@material-ui/core/styles';
 import { fade } from '@material-ui/core/styles/colorManipulator';
 import clsx from 'clsx';
@@ -24,10 +24,6 @@ const styles = theme => ({
   },
   button: {
     margin: theme.spacing.unit,
-  },
-  menuButton: {
-    marginLeft: -12,
-    marginRight: 20,
   },
   title: {
     flex: 1,
@@ -68,15 +64,26 @@ const styles = theme => ({
     width: '100%',
   },
   inputInput: {
-    paddingTop: theme.spacing.unit,
-    paddingRight: theme.spacing.unit,
-    paddingBottom: theme.spacing.unit,
+    padding: theme.spacing.unit,
     paddingLeft: theme.spacing.unit * 10,
     transition: theme.transitions.create('width'),
     width: '100%',
     [theme.breakpoints.up('md')]: {
       width: 200,
     },
+  },
+  nameInButton: {
+    marginRight: theme.spacing.unit,
+    color: "white",
+  },
+  avatar: {
+    backgroundColor: theme.palette.secondary.main,
+    color: "white",
+    width: theme.spacing.unit * 4,
+    height: theme.spacing.unit * 4,
+  },
+  menuIcon: {
+    marginRight: 0,
   },
 });
 
@@ -89,6 +96,10 @@ class Header extends Component {
       anchorAccountMenu: null,
       submitLinkDialogOpen: false,
     };
+  }
+
+  handleMenuOpen = ev => {
+    this.setState({ anchorAccountMenu: ev.currentTarget });
   }
 
   handleMenuClose = ev => {
@@ -114,7 +125,7 @@ class Header extends Component {
     return(
       <div className={classes.search}>
         <div className={classes.searchIcon}>
-          <SearchIcon />
+          <Icon className="fas fa-fw fa-search" />
         </div>
         <InputBase
           placeholder="Search…"
@@ -128,20 +139,35 @@ class Header extends Component {
   }
 
   renderAccountMenuLoggedIn = (user) => {
+    let { classes } = this.props;
     let { anchorAccountMenu } = this.state;
+    let userFirstChar = user.name.charAt(0).toUpperCase();
+
     return (<React.Fragment>
-      {`${user.name}`}
-      <IconButton
-        aria-owns={ !!anchorAccountMenu ? 'menu-appbar' : null }
-        aria-haspopup="true" color="inherit"
-        onClick={ (ev) => this.setState({ anchorAccountMenu: ev.currentTarget }) }>
-        <AccountCircle/>
-      </IconButton>
+      <Button onClick={ this.handleMenuOpen }>
+        <span className={ classes.nameInButton }>{ `${user.name}` }</span>
+        <Avatar className={ classes.avatar }>{ userFirstChar }</Avatar>
+      </Button>
+
       <Menu
         id="user-menu" anchorEl={ anchorAccountMenu }
+        getContentAnchorEl= { null }
+        disableAutoFocusItem={ true }
+        anchorOrigin={{ vertical: "bottom", horizontal: "right" }}
+        transformOrigin={{ vertical: "top", horizontal: "right" }}
         open={ !!anchorAccountMenu } onClose={ this.handleMenuClose }>
-        <MenuItem onClick={ this.handleMenuClose }>Profile</MenuItem>
-        <MenuItem onClick={ this.handleLogout }>Logout</MenuItem>
+        <MenuItem onClick={ this.handleMenuClose }>
+          <ListItemIcon className={ classes.menuIcon }>
+            <Icon className="far fa-fw fa-user" />
+          </ListItemIcon>
+          <ListItemText inset primary="Profile" />
+        </MenuItem>
+        <MenuItem onClick={ this.handleLogout }>
+          <ListItemIcon className={ classes.menuIcon }>
+            <Icon className="fas fa-fw fa-sign-out-alt" />
+          </ListItemIcon>
+          <ListItemText inset primary="Logout" />
+        </MenuItem>
       </Menu>
     </React.Fragment>)
   }
@@ -173,7 +199,6 @@ class Header extends Component {
           <Button className= { classes.menuBarText } onClick ={ this.openSubmitLinkDialog }>
             Submit
           </Button>
-          { this.renderSearch() }
           { user ?
             this.renderAccountMenuLoggedIn(user) :
             this.renderAccountMenuBeforeLogIn() }

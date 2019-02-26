@@ -11,7 +11,7 @@ import Routing from '../services/Routing';
 import { MuiThemeProvider, createMuiTheme } from '@material-ui/core/styles';
 import { indigo, orange } from '@material-ui/core/colors';
 
-import '../styles/App.css';
+import UseFontAwesome from '../services/UseFontAwesome';
 
 const theme = createMuiTheme({
   typography: {
@@ -29,6 +29,7 @@ class App extends Component {
       <BrowserRouter>
         <ApolloProvider client = { apolloClient }>
           <MuiThemeProvider theme={ theme }>
+            <UseFontAwesome />
             <Suspense fallback={ <div>Loading...</div> }>
               <CssBaseline />
               <Routing />
