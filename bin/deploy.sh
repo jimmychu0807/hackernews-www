@@ -1,5 +1,5 @@
 #!/usr/bin/env bash
-set -x
+# set -x
 
 # TP1 & TP2
 USER="jimmychu"
