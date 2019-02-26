@@ -147,7 +147,6 @@ class Header extends Component {
   }
 
   renderAccountMenuBeforeLogIn = () => {
-    const { anchorAccountMenu } = this.state;
     const { classes } = this.props;
     return (<Link to="/login">
       <Button variant="outlined" className={ clsx(classes.menuBarText, classes.loginBtn) }>LOGIN</Button>
@@ -159,7 +158,7 @@ class Header extends Component {
     const { classes } = this.props;
     const user = UserService.currentUser();
 
-    return(<React.Fragment>
+    return(<header>
       <AppBar className={ classes.appBar }>
         <Toolbar>
           <Typography variant="h6" color="inherit" className={classes.title}>
@@ -182,7 +181,7 @@ class Header extends Component {
       </AppBar>
       <SubmitLink dialogOpen={ submitLinkDialogOpen }
         handleDialogClose={ this.closeSubmitLinkDialog } />
-    </React.Fragment>)
+    </header>)
   }
 }
 

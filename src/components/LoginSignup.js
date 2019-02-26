@@ -4,28 +4,60 @@ import { Link } from 'react-router-dom';
 import { Mutation } from "react-apollo";
 
 // styling components
-import { TextField, Button, Typography } from '@material-ui/core';
+import {
+  TextField, Button, Typography, Paper, Avatar
+} from '@material-ui/core';
 import { withStyles } from '@material-ui/core/styles';
+import { LockOutlined as LockOutlinedIcon } from '@material-ui/icons';
 
 // services
 import UserService from '../services/UserService';
 import { LOGIN_GQL, SIGNUP_GQL } from './gql.js';
 
-const styles = theme => ({
-  form: {
-    display: 'flex',
-    flexFlow: 'row nowrap',
-    alignItems: 'baseline',
-    justifyContent: 'space-evenly',
-    flexGrow: 1,
-    width: 400,
-  },
-  textField: {
-    marginLeft: theme.spacing.unit,
-    marginRight: theme.spacing.unit,
-    width: 200,
-  }
-});
+const styles = theme => {
+
+  const breakpoint = 400 + theme.spacing.unit * 6;
+
+  return ({
+    section: {
+      width: 'auto',
+      display: 'block',
+      [theme.breakpoints.up(breakpoint)]: {
+        width: "400px",
+        margin: `0 auto`,
+      },
+    },
+    paper: {
+      display: 'flex',
+      flexDirection: 'column',
+      alignItems: 'center',
+      padding: theme.spacing.unit * 3,
+      [theme.breakpoints.up(breakpoint)]: {
+        marginTop: theme.spacing.unit * 6,
+      },
+    },
+    avatar: {
+      margin: theme.spacing.unit,
+      backgroundColor: theme.palette.secondary.light,
+    },
+    title: {
+      marginTop: theme.spacing.unit * 2,
+      marginBottom: theme.spacing.unit,
+    },
+    form: {
+      width: '100%', // Fix IE issue
+      marginTop: theme.spacing.unit * 2,
+      marginBottom: theme.spacing.unit * 2,
+    },
+    submit: {
+      margin: `${theme.spacing.unit * 3}px auto`,
+    },
+    errorMsg: {
+      color: "red",
+      fontWeight: "bold",
+    }
+  });
+}
 
 const DISPLAY_TYPES = ["login", "signup"]
 
@@ -48,10 +80,9 @@ class LoginSignup extends Component {
     });
   }
 
-  handleLogin = loginFunc => async ev => {
-    let { email, password } = this.state;
+  handleLogin = gqlFunc => async ev => {
     ev.preventDefault();
-    const { data: { userSignIn: result } } = await loginFunc({variables : { email, password } });
+    const { data: { userSignIn: result } } = await gqlFunc();
 
     // Login incorrect
     if (!result.token) {
@@ -82,27 +113,36 @@ class LoginSignup extends Component {
     const { classes } = this.props;
     const { email, password, showLoginError } = this.state;
 
-    return(
-      <Mutation mutation={ LOGIN_GQL }>{ (loginFunc, { loading, error }) => (
-        <Fragment>
-          <Typography variant="h4" gutterBottom>Login</Typography>
-          <form id="login-form" autoComplete="off" className={ classes.form }
-            onSubmit = { this.handleLogin(loginFunc) }>
-            <TextField id="login-email" type="email" className={classes.textField}
-              label="Login Email" margin="normal"
-              value={ email } onChange={ this.handleChange('email') } />
-            <TextField id="password" className={classes.textField}
-              label="Password" type="password"
-              margin="normal" autoComplete="login-password"
-              value={ password } onChange={ this.handleChange('password') } />
-            <Button disabled={loading} type="submit"
-              variant="contained" color="primary">{ loading ? "Loading..." : "Login" }</Button>
-            { showLoginError && <div>Incorrect Login. Please try again.</div> }
+    return (<section className={ classes.section }>
+      <Paper className={ classes.paper }>
+        <Avatar className={ classes.avatar }><LockOutlinedIcon /></Avatar>
+        <Typography component="h1" variant="h4" className={ classes.title }>
+          Log In
+        </Typography>
+        <Mutation mutation={ LOGIN_GQL }
+          variables={{ email, password }}>{ (gqlFunc, { loading, error }) => (
+          <form id="login-form" className={ classes.form }
+            onSubmit={ this.handleLogin(gqlFunc) }>
+            <TextField id="email" label="E-mail" type="email"
+              required fullWidth autoFocus
+              margin="normal" autoComplete="email"
+              value={ email } onChange={ this.handleChange('email') }/>
+            <TextField id="password" label="Password" type="password"
+              required fullWidth
+              margin="normal" autoComplete="password"
+              value={ password } onChange={ this.handleChange('password') }/>
+            <Button className={ classes.submit } type="submit" variant="contained"
+              fullWidth size="large" disabled={ loading }
+              color="primary">{ loading ? "Loading..." : "Log In" }</Button>
+            { showLoginError &&
+              <Typography align="center" className={ classes.errorMsg }>
+                Incorrect login. Please try again.
+              </Typography> }
           </form>
-          <Link to="/signup">Sign up for an account</Link>
-        </Fragment>
-      )}</Mutation>
-    )
+        ) }</Mutation>
+        <Link to="/signup">Sign up for an account</Link>
+      </Paper>
+    </section>)
   }
 
   renderSignupForm = () => {

@@ -25,15 +25,15 @@ class Footer extends Component {
     let { classes } = this.props;
 
     return(
-      <div className={ classes.footer }>
+      <footer className={ classes.footer }>
         <hr/>
         <Typography color="textSecondary" align="center" gutterBottom>
           Built with
-          <span className={ classes.emoji }>❤️</span>
+          <span role="img" aria-label="love" className={ classes.emoji }>❤️</span>
           by&nbsp;
           <a href="https://www.hkwtf.com" className={ classes.emphasis }>WTF Studio</a>
         </Typography>
-      </div>
+      </footer>
     )
   }
 
