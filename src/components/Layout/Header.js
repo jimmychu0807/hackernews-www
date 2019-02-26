@@ -1,5 +1,5 @@
 // core/data components
-import React, { Component, Fragment } from 'react';
+import React, { Component } from 'react';
 import { Link, withRouter } from 'react-router-dom';
 import { withApollo } from "react-apollo";
 
@@ -10,6 +10,9 @@ import { AppBar, Toolbar, IconButton, Typography, Button, InputBase,
 import { Search as SearchIcon, AccountCircle } from '@material-ui/icons';
 import { withStyles } from '@material-ui/core/styles';
 import { fade } from '@material-ui/core/styles/colorManipulator';
+
+//app components
+import SubmitLink from '../SubmitLink';
 
 // services
 import UserService from '../../services/UserService';
@@ -80,6 +83,7 @@ class Header extends Component {
     this.state = {
       appTitle: "Hacker News",
       anchorAccountMenu: null,
+      submitLinkDialogOpen: false,
     };
   }
 
@@ -91,6 +95,14 @@ class Header extends Component {
     this.handleMenuClose(ev);
     UserService.logout();
     this.props.history.push("/");
+  }
+
+  openSubmitLinkDialog = ev => {
+    this.setState({ submitLinkDialogOpen: true })
+  }
+
+  closeSubmitLinkDialog = ev => {
+    this.setState({ submitLinkDialogOpen: false })
   }
 
   renderSearch = () => {
@@ -113,46 +125,41 @@ class Header extends Component {
 
   renderAccountMenuLoggedIn = (user) => {
     let { anchorAccountMenu } = this.state;
-    return(
-      <Fragment>
-        {`${user.name}`}
-        <IconButton
-          aria-owns={ !!anchorAccountMenu ? 'menu-appbar' : null }
-          aria-haspopup="true" color="inherit"
-          onClick={ (ev) => this.setState({ anchorAccountMenu: ev.currentTarget }) }>
-          <AccountCircle/>
-        </IconButton>
-        <Menu
-          id="user-menu" anchorEl={ anchorAccountMenu }
-          open={ !!anchorAccountMenu } onClose={ this.handleMenuClose }
-        >
-          <MenuItem onClick={ this.handleMenuClose }>Profile</MenuItem>
-          <MenuItem onClick={ this.handleLogout }>Logout</MenuItem>
-        </Menu>
-      </Fragment>
-    )
+    return (<React.Fragment>
+      {`${user.name}`}
+      <IconButton
+        aria-owns={ !!anchorAccountMenu ? 'menu-appbar' : null }
+        aria-haspopup="true" color="inherit"
+        onClick={ (ev) => this.setState({ anchorAccountMenu: ev.currentTarget }) }>
+        <AccountCircle/>
+      </IconButton>
+      <Menu
+        id="user-menu" anchorEl={ anchorAccountMenu }
+        open={ !!anchorAccountMenu } onClose={ this.handleMenuClose }>
+        <MenuItem onClick={ this.handleMenuClose }>Profile</MenuItem>
+        <MenuItem onClick={ this.handleLogout }>Logout</MenuItem>
+      </Menu>
+    </React.Fragment>)
   }
 
   renderAccountMenuBeforeLogIn = () => {
     const { anchorAccountMenu } = this.state;
     const { classes } = this.props;
-    return(
-      <Link to="/login" className={ classes.menuBarText }>
-        <IconButton
-          aria-owns={ !!anchorAccountMenu ? 'menu-appbar' : null }
-          aria-haspopup="true" color="inherit">
-          <AccountCircle/>
-        </IconButton>
-      </Link>
-    )
+    return (<Link to="/login" className={ classes.menuBarText }>
+      <IconButton
+        aria-owns={ !!anchorAccountMenu ? 'menu-appbar' : null }
+        aria-haspopup="true" color="inherit">
+        <AccountCircle/>
+      </IconButton>
+    </Link>)
   }
 
   render() {
-    const { appTitle } = this.state;
+    const { appTitle, submitLinkDialogOpen } = this.state;
     const { classes } = this.props;
     const user = UserService.currentUser();
 
-    return(
+    return(<React.Fragment>
       <AppBar className={ classes.appBar }>
         <Toolbar>
           <Typography variant="h6" color="inherit" className={classes.title}>
@@ -162,14 +169,18 @@ class Header extends Component {
           <Button>
             <Link to="/top-vote" className={ classes.menuBarText }>Top Vote</Link>
           </Button>
-          <Button>
-            <Link to="/submit-link" className={ classes.menuBarText }>Submit</Link>
+          <Button onClick = { this.openSubmitLinkDialog }>
+            Submit
           </Button>
           { this.renderSearch() }
-          { user ? this.renderAccountMenuLoggedIn(user) : this.renderAccountMenuBeforeLogIn() }
+          { user ?
+            this.renderAccountMenuLoggedIn(user) :
+            this.renderAccountMenuBeforeLogIn() }
         </Toolbar>
       </AppBar>
-    )
+      <SubmitLink dialogOpen={ submitLinkDialogOpen }
+        handleDialogClose={ this.closeSubmitLinkDialog } />
+    </React.Fragment>)
   }
 }
 
