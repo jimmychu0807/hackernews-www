@@ -120,6 +120,11 @@ class Header extends Component {
     this.setState({ submitLinkDialogOpen: false })
   }
 
+  gotoLink = link => ev => {
+    this.handleMenuClose();
+    this.props.history.push(link);
+  }
+
   renderSearch = () => {
     const { classes } = this.props;
     return(
@@ -156,7 +161,7 @@ class Header extends Component {
         anchorOrigin={{ vertical: "bottom", horizontal: "right" }}
         transformOrigin={{ vertical: "top", horizontal: "right" }}
         open={ !!anchorAccountMenu } onClose={ this.handleMenuClose }>
-        <MenuItem onClick={ this.handleMenuClose }>
+        <MenuItem onClick={ this.gotoLink("/profile/edit") }>
           <ListItemIcon className={ classes.menuIcon }>
             <Icon className="far fa-fw fa-user" />
           </ListItemIcon>

@@ -1,9 +1,14 @@
 import React, { Component } from 'react';
+import { Link as RouterLink } from 'react-router-dom';
 
-// Styling
+// styling components
 import { withStyles } from '@material-ui/core/styles';
-import { Paper } from '@material-ui/core';
+import {
+  Paper, Button
+} from '@material-ui/core';
 
+// Our own services
+import { getDomainFromLink } from '../services/HelperMethods';
 
 const styles = theme => ({
   one_link: {
@@ -16,19 +21,24 @@ const styles = theme => ({
 
 class Link extends Component {
 
-  getDomain = (linkUrl) => {
-    return linkUrl;
-  }
-
   render() {
-    const { ind, link, classes } = this.props
-    const linkOwner = link.user
+    const { ind, link, classes } = this.props;
+    const linkOwner = link.user;
+    const domain = getDomainFromLink(link.url);
+
     return (
       <Paper className = { classes.one_link }>
-        <span>{ind + 1}.</span>
+        <span>{ ind + 1 }.</span>
         <a href={link.url} target="_blank" rel="noopener noreferrer">{link.description}</a>
-        <div>by { linkOwner.name }</div>
-        <div>Vote: { link.votesCount }</div>
+        ({ domain })
+        <div>
+          by&nbsp;
+          <RouterLink to={ `/profile/${linkOwner.id}` }>{ linkOwner.name }</RouterLink>
+        </div>
+        <div>
+          <span>Vote: { link.votesCount }</span>
+          <Button color="primary">UPVOTE</Button>
+        </div>
         <div>Submitted At: { link.createdAt }</div>
       </Paper>
     )
