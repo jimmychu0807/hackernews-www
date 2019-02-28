@@ -1,15 +1,13 @@
 import gql from "graphql-tag";
 
-export const SUBMIT_LINK_GQL = gql`
-mutation submitLink($url: String!, $description: String) {
+export const SUBMIT_LINK_GQL = gql`mutation submitLink($url: String!, $description: String) {
   createLink(url: $url, description: $description) {
     errors
     link { id url description }
   }
 }`;
 
-export const LINKS_QUERY_GQL = gql`
-query linksQuery($sortBy: String, $desc: Boolean) {
+export const LINKS_QUERY_GQL = gql`query linksQuery($sortBy: String, $desc: Boolean) {
   allLinks(sortBy: $sortBy, desc: $desc) {
     nodes {
       id url description votesCount createdAt loginUserVoted
@@ -44,5 +42,14 @@ export const CANCEL_UPVOTE_GQL = gql`mutation cancelUpvote($linkId: ID!) {
   cancelUpvote(linkId: $linkId) {
     errors
     link { id votesCount }
+  }
+}`;
+
+export const GET_COMMENTS_GQL = gql`query getComments($commentableId: ID!, $levelType: String) {
+  getCommentsByCommentableId(commentableId: $commentableId, levelType: $levelType) {
+    nodes {
+      id content createdAt
+      user { id name }
+    }
   }
 }`;

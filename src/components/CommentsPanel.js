@@ -8,6 +8,10 @@ import {
 } from '@material-ui/core';
 import { withStyles } from '@material-ui/core/styles';
 
+// services
+import CommentInCommentsPanel from './CommentInCommentsPanel';
+import { GET_COMMENTS_GQL } from './gql.js';
+
 const styles = theme => ({
   wrapper: {
     display: "flex",
@@ -22,13 +26,19 @@ class CommentsPanel extends Component {
     super(props);
     this.state = {
       content: "",
+      comments: [],
     }
   }
 
-  componentDidMount() {
-    const { client: apolloClient } = this.props;
-
+  async componentDidMount() {
+    const { client: apolloClient, link } = this.props;
     // Need to load the comments of the link
+
+    let { data: { getCommentsByCommentableId: { nodes: comments } } } =
+      await apolloClient.query({ query: GET_COMMENTS_GQL,
+        variables: { commentableId: link.id, levelType: "top_level" } });
+
+    this.setState({ comments: comments });
   }
 
   handleChange = name => ev => {
@@ -37,7 +47,7 @@ class CommentsPanel extends Component {
 
   render() {
     const { link, classes } = this.props;
-    const { content } = this.state;
+    const { content, comments } = this.state;
 
     return(<div className={ classes.wrapper }>
       <TextField id={ `${link.id}-comment` } label="Comment"
@@ -47,6 +57,7 @@ class CommentsPanel extends Component {
         onChange = { this.handleChange('content') }
         margin="normal" />
       <Button color="primary">Submit</Button>
+      { comments.map( (comment) => <CommentInCommentsPanel key= { comment.id } comment={ comment } />) }
     </div>)
   }
 }
