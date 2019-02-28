@@ -12,8 +12,8 @@ export const LINKS_QUERY_GQL = gql`
 query linksQuery($sortBy: String, $desc: Boolean) {
   allLinks(sortBy: $sortBy, desc: $desc) {
     nodes {
-      id url description votesCount createdAt
-      user { id name }
+      id url description votesCount createdAt loginUserVoted
+      submitter { id name }
     }
   }
 }`;
@@ -29,5 +29,19 @@ export const SIGNUP_GQL = gql`mutation user($name: String!, $email: String!, $pa
   createUser(name: $name, email: $email, password: $password) {
     errors token
     user { id name email }
+  }
+}`;
+
+export const UPVOTE_GQL = gql`mutation upvote($linkId: ID!) {
+  createVote(linkId: $linkId) {
+    errors vote { id }
+    link { id votesCount }
+  }
+}`;
+
+export const CANCEL_UPVOTE_GQL = gql`mutation cancelUpvote($linkId: ID!) {
+  cancelUpvote(linkId: $linkId) {
+    errors
+    link { id votesCount }
   }
 }`;
