@@ -53,3 +53,13 @@ export const GET_COMMENTS_GQL = gql`query getComments($commentableId: ID!, $leve
     }
   }
 }`;
+
+export const POST_COMMENT_GQL = gql`mutation postComment($commentableId: ID!, $content: String!) {
+  postComment(commentableId: $commentableId, content: $content) {
+    errors
+    comment {
+      id content createdAt
+      user { id name }
+    }
+  }
+}`;
