@@ -14,6 +14,7 @@ query linksQuery($sortBy: String, $desc: Boolean) {
     nodes {
       id url description votesCount createdAt loginUserVoted
       submitter { id name }
+      commentsCount
     }
   }
 }`;

@@ -4,12 +4,15 @@ import { Link as RouterLink } from 'react-router-dom';
 import { Mutation } from "react-apollo";
 
 // styling components
-import { withStyles } from '@material-ui/core/styles';
 import {
-  Paper, Button
+  Paper, Button, ExpansionPanel, ExpansionPanelSummary, ExpansionPanelDetails,
+  Typography
 } from '@material-ui/core';
+import { withStyles } from '@material-ui/core/styles';
+import { ExpandMore as ExpandMoreIcon } from '@material-ui/icons';
 
 // Our own services
+import CommentsPanel from './CommentsPanel';
 import { getDomainFromLink } from '../services/HelperMethods';
 import { UPVOTE_GQL, CANCEL_UPVOTE_GQL } from './gql.js';
 
@@ -89,6 +92,14 @@ class Link extends Component {
           this.renderUpvoteBtn(link) }
       </div>
       <div>Submitted At: { link.createdAt }</div>
+      <ExpansionPanel>
+        <ExpansionPanelSummary expandIcon={ <ExpandMoreIcon /> }>
+          <Typography>Comments: { link.commentsCount }</Typography>
+        </ExpansionPanelSummary>
+        <ExpansionPanelDetails>
+          <CommentsPanel link={ link } />
+        </ExpansionPanelDetails>
+      </ExpansionPanel>
     </Paper>)
   }
 }
