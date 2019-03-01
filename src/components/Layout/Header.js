@@ -5,7 +5,7 @@ import { withApollo } from "react-apollo";
 
 // styling components
 import {
-  AppBar, Toolbar, Typography, Button, InputBase,
+  AppBar, Toolbar, Typography, Button,
   Menu, MenuItem, Avatar, Icon, ListItemIcon, ListItemText
 } from '@material-ui/core';
 import { withStyles } from '@material-ui/core/styles';
@@ -107,9 +107,9 @@ class Header extends Component {
   }
 
   handleLogout = ev => {
-    this.handleMenuClose(ev);
     UserService.logout();
     this.props.history.push("/");
+    this.handleMenuClose(ev);
   }
 
   openSubmitLinkDialog = ev => {
@@ -120,28 +120,23 @@ class Header extends Component {
     this.setState({ submitLinkDialogOpen: false })
   }
 
-  gotoLink = link => ev => {
-    this.handleMenuClose();
-    this.props.history.push(link);
-  }
-
-  renderSearch = () => {
-    const { classes } = this.props;
-    return(
-      <div className={classes.search}>
-        <div className={classes.searchIcon}>
-          <Icon className="fas fa-fw fa-search" />
-        </div>
-        <InputBase
-          placeholder="Search…"
-          classes={{
-            root: classes.inputRoot,
-            input: classes.inputInput,
-          }}
-        />
-      </div>
-    )
-  }
+  // renderSearch = () => {
+  //   const { classes } = this.props;
+  //   return(
+  //     <div className={classes.search}>
+  //       <div className={classes.searchIcon}>
+  //         <Icon className="fas fa-fw fa-search" />
+  //       </div>
+  //       <InputBase
+  //         placeholder="Search…"
+  //         classes={{
+  //           root: classes.inputRoot,
+  //           input: classes.inputInput,
+  //         }}
+  //       />
+  //     </div>
+  //   )
+  // }
 
   renderAccountMenuLoggedIn = (user) => {
     let { classes } = this.props;
@@ -161,7 +156,7 @@ class Header extends Component {
         anchorOrigin={{ vertical: "bottom", horizontal: "right" }}
         transformOrigin={{ vertical: "top", horizontal: "right" }}
         open={ !!anchorAccountMenu } onClose={ this.handleMenuClose }>
-        <MenuItem onClick={ this.gotoLink("/profile/edit") }>
+        <MenuItem component={ Link } to="/profile/edit" onClick={ this.handleMenuClose }>
           <ListItemIcon className={ classes.menuIcon }>
             <Icon className="far fa-fw fa-user" />
           </ListItemIcon>
@@ -174,6 +169,7 @@ class Header extends Component {
           <ListItemText inset primary="Logout" />
         </MenuItem>
       </Menu>
+
     </React.Fragment>)
   }
 
