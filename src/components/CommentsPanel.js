@@ -1,6 +1,6 @@
 // core/data components
 import React, { Component } from 'react';
-import { withApollo } from "react-apollo";
+import { withApollo, Query } from "react-apollo";
 
 // styling components
 import {
@@ -9,8 +9,11 @@ import {
 import { withStyles } from '@material-ui/core/styles';
 
 // services
+import { GET_COMMENTS_GQL, POST_COMMENT_GQL, LINKS_QUERY_GQL } from './gql.js';
 import CommentInCommentsPanel from './CommentInCommentsPanel';
-import { GET_COMMENTS_GQL, POST_COMMENT_GQL } from './gql.js';
+import { getQueryVarsFromParam } from '../services/HelperMethods';
+import { defaultLinksOrder } from '../services/Routing';
+
 
 const styles = theme => ({
   wrapper: {
@@ -26,27 +29,16 @@ class CommentsPanel extends Component {
     super(props);
     this.state = {
       content: "",
-      comments: [],
     }
-
+    // The following two objects for refetching queries after mutation
     this.getCommentsGqlObj = {
       query: GET_COMMENTS_GQL,
       variables: { commentableId: props.link.id, levelType: "top_level" },
     }
-  }
-
-  componentDidMount() {
-    this.fetchLinkComments();
-  }
-
-  fetchLinkComments = async() => {
-    const { client: apolloClient } = this.props;
-    // Need to load the comments of the link
-
-    let { data: { getCommentsByCommentableId: { nodes: comments } } } =
-      await apolloClient.query(this.getCommentsGqlObj);
-
-    this.setState({ comments: comments });
+    this.linksQueryGqlObj = {
+      query: LINKS_QUERY_GQL,
+      variables: getQueryVarsFromParam(defaultLinksOrder),
+    }
   }
 
   handleInputChange = name => ev => {
@@ -58,31 +50,21 @@ class CommentsPanel extends Component {
 
     let { content } = this.state;
     content = content.trim();
-
     if (content.length === 0) return;
 
     const { client: apolloClient, link } = this.props;
     await apolloClient.mutate({
       mutation: POST_COMMENT_GQL,
       variables: { commentableId: link.id, content },
-      update: (proxy, { data: { postComment: { comment } } }) => {
-        // Update apollo cache
-        const cache = proxy.readQuery(this.getCommentsGqlObj);
-        let comments = cache.getCommentsByCommentableId.nodes;
-        comments.unshift(comment);
-        proxy.writeQuery({ ...this.getCommentsGqlObj, data: cache });
-
-        // Update component state
-        this.setState({ comments: comments });
-      }
+      refetchQueries: [ this.getCommentsGqlObj, this.linksQueryGqlObj ]
     });
 
     this.setState({ content: "" });
   }
 
   render() {
-    const { link, classes } = this.props;
-    const { content, comments } = this.state;
+    const { link, classes, commentsPanelEverOpen } = this.props;
+    const { content } = this.state;
 
     return(<div className={ classes.wrapper }>
       <TextField id={ `${link.id}-comment` } label="Comment"
@@ -91,8 +73,20 @@ class CommentsPanel extends Component {
         value={ content }
         onChange = { this.handleInputChange('content') }
         margin="normal" />
+
       <Button color="primary" onClick={ this.handlePostComment }>Submit</Button>
-      { comments.map( (comment) => <CommentInCommentsPanel key= { comment.id } comment={ comment } />) }
+
+      { commentsPanelEverOpen && (<Query { ...this.getCommentsGqlObj }>
+        { ({ loading, error, data }) => {
+          if (loading) return (<div>Fetching...</div>)
+
+          const { getCommentsByCommentableId: { nodes: comments } } = data
+          return(<div>{
+            comments.map( (comment) =>
+              <CommentInCommentsPanel key= { comment.id } comment={ comment } />)
+          }</div>)
+        } }
+      </Query>) }
     </div>)
   }
 }

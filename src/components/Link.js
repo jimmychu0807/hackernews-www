@@ -31,7 +31,8 @@ class Link extends Component {
     super(props);
     const { link } = this.props;
     this.state = {
-      renderActionBtnType: (link.loginUserVoted ? "cancelUpvoteBtn" : "upvoteBtn")
+      renderActionBtnType: (link.loginUserVoted ? "cancelUpvoteBtn" : "upvoteBtn"),
+      commentsPanelEverOpen: false,
     };
   }
 
@@ -41,11 +42,11 @@ class Link extends Component {
     const targetStates = {
       upvote: "cancelUpvoteBtn",
       cancelUpvote: "upvoteBtn",
+      default: "cancelUpvoteBtn"
     }
 
     // Using object literal to replace switch-case stmt
-    let targetState = targetStates[type];
-    if (!targetState) return new Error(`Unknown type: ${type}`);
+    let targetState = targetStates[type] || targetStates.default;
     this.setState({ renderActionBtnType: targetState });
   }
 
@@ -71,9 +72,11 @@ class Link extends Component {
     )
   }
 
+  handleOpenPanel = ev => (this.setState({ commentsPanelEverOpen: true }))
+
   render() {
     const { ind, link, classes } = this.props;
-    const { renderActionBtnType } = this.state;
+    const { renderActionBtnType, commentsPanelEverOpen } = this.state;
     const linkOwner = link.submitter;
     const domain = getDomainFromLink(link.url);
 
@@ -93,11 +96,11 @@ class Link extends Component {
       </div>
       <div>Submitted At: { link.createdAt }</div>
       <ExpansionPanel>
-        <ExpansionPanelSummary expandIcon={ <ExpandMoreIcon /> }>
+        <ExpansionPanelSummary expandIcon={ <ExpandMoreIcon /> } onClick={ this.handleOpenPanel }>
           <Typography>Comments: { link.commentsCount }</Typography>
         </ExpansionPanelSummary>
         <ExpansionPanelDetails>
-          <CommentsPanel link={ link } />
+          <CommentsPanel link={ link } commentsPanelEverOpen={ commentsPanelEverOpen } />
         </ExpansionPanelDetails>
       </ExpansionPanel>
     </Paper>)
