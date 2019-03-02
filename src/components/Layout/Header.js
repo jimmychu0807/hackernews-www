@@ -6,7 +6,8 @@ import { withApollo } from "react-apollo";
 // styling components
 import {
   AppBar, Toolbar, Typography, Button,
-  Menu, MenuItem, Avatar, Icon, ListItemIcon, ListItemText
+  MenuItem, Avatar, Icon, ListItemIcon, ListItemText,
+  Popper, Grow, Paper, ClickAwayListener, MenuList
 } from '@material-ui/core';
 import { withStyles } from '@material-ui/core/styles';
 import { fade } from '@material-ui/core/styles/colorManipulator';
@@ -120,6 +121,11 @@ class Header extends Component {
     this.setState({ submitLinkDialogOpen: false })
   }
 
+  menuGotoUrl = siteUrl => ev => {
+    this.props.history.push(siteUrl);
+    this.handleMenuClose(ev);
+  }
+
   // renderSearch = () => {
   //   const { classes } = this.props;
   //   return(
@@ -149,27 +155,30 @@ class Header extends Component {
         <Avatar className={ classes.avatar }>{ userFirstChar }</Avatar>
       </Button>
 
-      <Menu
-        id="user-menu" anchorEl={ anchorAccountMenu }
-        getContentAnchorEl= { null }
-        disableAutoFocusItem={ true }
-        anchorOrigin={{ vertical: "bottom", horizontal: "right" }}
-        transformOrigin={{ vertical: "top", horizontal: "right" }}
-        open={ !!anchorAccountMenu } onClose={ this.handleMenuClose }>
-        <MenuItem component={ Link } to="/profile/edit" onClick={ this.handleMenuClose }>
-          <ListItemIcon className={ classes.menuIcon }>
-            <Icon className="far fa-fw fa-user" />
-          </ListItemIcon>
-          <ListItemText inset primary="Profile" />
-        </MenuItem>
-        <MenuItem onClick={ this.handleLogout }>
-          <ListItemIcon className={ classes.menuIcon }>
-            <Icon className="fas fa-fw fa-sign-out-alt" />
-          </ListItemIcon>
-          <ListItemText inset primary="Logout" />
-        </MenuItem>
-      </Menu>
+      <Popper open={ !!anchorAccountMenu } anchorEl={ anchorAccountMenu }
+        transition disablePortal>{ ({ TransitionProps }) => (
+        <Grow {...TransitionProps} id="menu-item-grow"
+          style={{ transformOrigin: 'center top' }}
+          ><Paper><ClickAwayListener onClickAway={ this.handleMenuClose }>
+          <MenuList>
 
+            <MenuItem onClick={ this.menuGotoUrl("/profile/edit") }>
+              <ListItemIcon className={ classes.menuIcon }>
+                <Icon className="far fa-fw fa-user" />
+              </ListItemIcon>
+              <ListItemText inset primary="Profile" />
+            </MenuItem>
+
+            <MenuItem onClick={ this.handleLogout }>
+              <ListItemIcon className={ classes.menuIcon }>
+                <Icon className="fas fa-fw fa-sign-out-alt" />
+              </ListItemIcon>
+              <ListItemText inset primary="Logout" />
+            </MenuItem>
+
+          </MenuList>
+        </ClickAwayListener></Paper></Grow>
+      ) }</Popper>
     </React.Fragment>)
   }
 
