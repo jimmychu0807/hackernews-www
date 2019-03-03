@@ -4,6 +4,7 @@ dotenv.config();
 
 const CONFIG = {
   default: {
+    LINKS_PER_PAGE: 25,
   },
   development: {
     GRAPHQL_ENDPOINT: "http://localhost:3000/graphql",

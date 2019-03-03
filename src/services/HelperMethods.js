@@ -1,9 +1,9 @@
 import _ from 'lodash';
 import TimeDiff from 'js-time-diff';
 
-export function getQueryVarsFromParam(param) {
+export function getQueryVarsFromParam(param, first, after) {
   let res = param.split("-");
-  return { sortBy: res[0], desc: (res[1] === "desc") };
+  return { sortBy: res[0], desc: (res[1] === "desc"), first, after };
 }
 
 export function getDomainFromLink(link) {

@@ -8,7 +8,7 @@ const styles = theme => ({
   footer: {
     width: "100%",
     padding: `${theme.spacing.unit}px ${theme.spacing.unit*2}px ${theme.spacing.unit}px`,
-    marginTop: theme.spacing.unit * 3,
+    marginTop: theme.spacing.unit,
   },
   emoji: {
     margin: `0 ${theme.spacing.unit}px`,

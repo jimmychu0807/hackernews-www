@@ -127,7 +127,7 @@ class Link extends Component {
             <Grid item>
               {/* Submitter info */}
               <Typography variant="body1" className={ classes.linkMinor }>
-                <span className={classes.linkIndex}>#{ind}</span>
+                <span className={classes.linkIndex}>#{ind + 1}</span>
                 <UserProfileLink user={ linkOwner } />
                 <span className={ classes.linkPosted }>{ timeDiff(link.createdAt) }</span>
               </Typography>
