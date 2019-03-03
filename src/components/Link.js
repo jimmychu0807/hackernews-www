@@ -13,7 +13,7 @@ import { grey } from '@material-ui/core/colors';
 // Our own services
 import CommentsPanel from './CommentsPanel';
 import UserProfileLink from './UserProfileLink';
-import { getDomainFromLink } from '../services/HelperMethods';
+import { getDomainFromLink, timeDiff } from '../services/HelperMethods';
 import { UPVOTE_GQL, CANCEL_UPVOTE_GQL } from './gql.js';
 
 const styles = theme => ({
@@ -129,7 +129,7 @@ class Link extends Component {
               <Typography variant="body1" className={ classes.linkMinor }>
                 <span className={classes.linkIndex}>#{ind}</span>
                 <UserProfileLink user={ linkOwner } />
-                <span className={ classes.linkPosted }>{ link.createdAt }</span>
+                <span className={ classes.linkPosted }>{ timeDiff(link.createdAt) }</span>
               </Typography>
             </Grid>
           </Grid>
