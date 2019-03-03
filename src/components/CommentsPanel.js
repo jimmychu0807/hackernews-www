@@ -4,7 +4,7 @@ import { withApollo, Query } from "react-apollo";
 
 // styling components
 import {
-  TextField, Button
+  TextField, Button, Divider
 } from '@material-ui/core';
 import { withStyles } from '@material-ui/core/styles';
 
@@ -20,6 +20,11 @@ const styles = theme => ({
     display: "flex",
     flexDirection: "column",
     width: "100%",
+  },
+  withMargin: {
+    ...theme.mixins.gutters(),
+    marginTop: theme.spacing.unit,
+    marginBottom: theme.spacing.unit,
   }
 });
 
@@ -69,7 +74,7 @@ class CommentsPanel extends Component {
     return(<div className={ classes.wrapper }>
       <TextField id={ `${link.id}-comment` } label="Comment"
         fullWidth multiline required
-        rows={ 3 } rowsMax={ 5 }
+        rows={3} rowsMax={3}
         value={ content }
         onChange = { this.handleInputChange('content') }
         margin="normal" />
@@ -82,8 +87,9 @@ class CommentsPanel extends Component {
 
           const { getCommentsByCommentableId: { nodes: comments } } = data
           return(<div>{
-            comments.map( (comment) =>
-              <CommentInCommentsPanel key= { comment.id } comment={ comment } />)
+            comments.length > 0 && comments
+              .map(comment => <CommentInCommentsPanel key={ comment.id } comment={ comment } />)
+              .reduce((mem, current, i) => [ mem, <Divider key={i} className={ classes.withMargin } />, current ])
           }</div>)
         } }
       </Query>) }
