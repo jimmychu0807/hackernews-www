@@ -4,6 +4,9 @@ import React, { Component } from 'react';
 import { Typography } from '@material-ui/core';
 import { withStyles } from '@material-ui/core/styles';
 
+// Multilingual Support
+import { Translate } from 'react-localize-redux';
+
 const styles = theme => ({
   footer: {
     width: "100%",
@@ -28,10 +31,7 @@ class Footer extends Component {
       <footer className={ classes.footer }>
         <hr/>
         <Typography color="textSecondary" align="center" gutterBottom>
-          Built with
-          <span role="img" aria-label="love" className={ classes.emoji }>❤️</span>
-          by&nbsp;
-          <a href="https://www.hkwtf.com" className={ classes.emphasis }>WTF Studio</a>
+          <Translate id="footer.main" />
         </Typography>
       </footer>
     )

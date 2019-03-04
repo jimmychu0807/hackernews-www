@@ -1,0 +1,21 @@
+{
+  "misc": {
+    "loading": "loading...",
+    "appTitle": "Hacker News"
+  },
+  "header": {
+    "topVote": "Top Vote",
+    "submit": "Submit",
+    "login": "LOGIN",
+    "profile": "Profile",
+    "logout": "Logout",
+    "lang": {
+      "en": "EN",
+      "zh_HK": "繁中",
+      "zh_CN": "简中"
+    }
+  },
+  "footer": {
+    "main": "Built with <span role='img' aria-label='love' className={ classes.emoji }>❤️</span> by <a href='https://www.hkwtf.com' className={ classes.emphasis }>WTF Studio</a>"
+  }
+}

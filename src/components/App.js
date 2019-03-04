@@ -1,15 +1,24 @@
 // core/data library
 import React, { Component, Suspense } from 'react';
-import { BrowserRouter } from 'react-router-dom';
+import { BrowserRouter as Router } from 'react-router-dom';
 import CssBaseline from '@material-ui/core/CssBaseline';
 import { ApolloProvider } from 'react-apollo';
-
-import apolloClient from '../services/ApolloClient';
-import Routing from '../services/Routing';
 
 // Styling
 import { MuiThemeProvider, createMuiTheme } from '@material-ui/core/styles';
 import { indigo, orange } from '@material-ui/core/colors';
+
+// Multilingual Support
+import { withLocalize, Translate } from 'react-localize-redux';
+import { renderToStaticMarkup } from "react-dom/server";
+import enTranslation from './translations/en.json';
+import zhHKTranslation from './translations/zh_HK.json';
+import zhCNTranslation from './translations/zh_CN.json';
+
+import apolloClient from '../services/ApolloClient';
+import Routing from '../services/Routing';
+
+// --- Components ---
 
 const theme = createMuiTheme({
   typography: {
@@ -22,20 +31,41 @@ const theme = createMuiTheme({
 });
 
 class App extends Component {
+
+  constructor(props) {
+    super(props);
+
+    this.props.initialize({
+      languages: [
+        { name: "English", code: "en" },
+        { name: "Traditional Chinese", code: "zh_HK" },
+        { name: "Simplified Chinese", code: "zh_CN" },
+      ],
+      options: {
+        renderToStaticMarkup,
+        renderInnerHtml: true,
+        defaultLanguage: "en",
+      },
+    });
+    this.props.addTranslationForLanguage(enTranslation, "en");
+    this.props.addTranslationForLanguage(zhHKTranslation, "zh_HK");
+    this.props.addTranslationForLanguage(zhCNTranslation, "zh_CN");
+  }
+
   render() {
     return(
-      <BrowserRouter>
+      <Router>
         <ApolloProvider client = { apolloClient }>
           <MuiThemeProvider theme={ theme }>
-            <Suspense fallback={ <div>Loading...</div> }>
+            <Suspense fallback={ <div><Translate id="misc.loading" /></div> }>
               <CssBaseline />
               <Routing />
             </Suspense>
           </MuiThemeProvider>
         </ApolloProvider>
-      </BrowserRouter>
+      </Router>
     )
   }
 }
 
-export default App;
+export default withLocalize(App);

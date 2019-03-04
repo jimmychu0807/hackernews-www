@@ -5,13 +5,18 @@ import { withApollo } from "react-apollo";
 
 // styling components
 import {
-  AppBar, Toolbar, Typography, Button,
+  AppBar, Toolbar, Typography, Button, IconButton, Menu,
   MenuItem, Avatar, Icon, ListItemIcon, ListItemText,
   Popper, Grow, Paper, ClickAwayListener, MenuList
 } from '@material-ui/core';
 import { withStyles } from '@material-ui/core/styles';
+import { Language as LanguageIcon } from '@material-ui/icons';
+
 import { fade } from '@material-ui/core/styles/colorManipulator';
 import clsx from 'clsx';
+
+//Multilingual Support
+import { withLocalize, Translate } from 'react-localize-redux';
 
 //app components
 import SubmitLink from '../SubmitLink';
@@ -93,18 +98,18 @@ class Header extends Component {
     super(props);
 
     this.state = {
-      appTitle: "Hacker News",
       anchorAccountMenu: null,
+      anchorLangsMenu: null,
       submitLinkDialogOpen: false,
     };
   }
 
-  handleMenuOpen = ev => {
-    this.setState({ anchorAccountMenu: ev.currentTarget });
+  handleMenuOpen = type => ev => {
+    this.setState({ [type]: ev.currentTarget });
   }
 
-  handleMenuClose = ev => {
-    this.setState({ anchorAccountMenu: null });
+  handleMenuClose = type => ev => {
+    this.setState({ [type]: null });
   }
 
   handleLogout = ev => {
@@ -150,7 +155,7 @@ class Header extends Component {
     let userFirstChar = user.name.charAt(0).toUpperCase();
 
     return (<React.Fragment>
-      <Button onClick={ this.handleMenuOpen }>
+      <Button onClick={ this.handleMenuOpen("anchorAccountMenu") }>
         <span className={ classes.nameInButton }>{ `${user.name}` }</span>
         <Avatar className={ classes.avatar }>{ userFirstChar }</Avatar>
       </Button>
@@ -159,21 +164,21 @@ class Header extends Component {
         transition disablePortal>{ ({ TransitionProps }) => (
         <Grow {...TransitionProps} id="menu-item-grow"
           style={{ transformOrigin: 'center top' }}
-          ><Paper><ClickAwayListener onClickAway={ this.handleMenuClose }>
+          ><Paper><ClickAwayListener onClickAway={ this.handleMenuClose("anchorAccountMenu") }>
           <MenuList>
 
             <MenuItem onClick={ this.menuGotoUrl("/profile/edit") }>
               <ListItemIcon className={ classes.menuIcon }>
                 <Icon className="far fa-fw fa-user" />
               </ListItemIcon>
-              <ListItemText inset primary="Profile" />
+              <ListItemText inset primary={ <Translate id="header.profile" /> } />
             </MenuItem>
 
             <MenuItem onClick={ this.handleLogout }>
               <ListItemIcon className={ classes.menuIcon }>
                 <Icon className="fas fa-fw fa-sign-out-alt" />
               </ListItemIcon>
-              <ListItemText inset primary="Logout" />
+              <ListItemText inset primary={ <Translate id="header.logout" /> } />
             </MenuItem>
 
           </MenuList>
@@ -185,12 +190,38 @@ class Header extends Component {
   renderAccountMenuBeforeLogIn = () => {
     const { classes } = this.props;
     return (<Link to="/login">
-      <Button variant="outlined" className={ clsx(classes.menuBarText, classes.loginBtn) }>LOGIN</Button>
+      <Button variant="outlined" className={ clsx(classes.menuBarText, classes.loginBtn) }>
+        <Translate id="header.login" />
+      </Button>
     </Link>)
   }
 
+  renderLanguagesMenu = () => {
+    const { classes, languages, activeLanguage, setActiveLanguage } = this.props;
+    const { anchorLangsMenu } = this.state;
+
+    return (<React.Fragment>
+      <IconButton onClick={ this.handleMenuOpen("anchorLangsMenu") } className={ classes.menuBarText }>
+        <LanguageIcon />
+      </IconButton>
+
+      <Menu id="langs-menu" anchorEl={ anchorLangsMenu } disableAutoFocusItem
+        open={ !!anchorLangsMenu } onClose={ this.handleMenuClose("anchorLangsMenu") }
+        getContentAnchorEl={null}
+        anchorOrigin={{ horizontal: "right", vertical: "bottom" }}
+        transformOrigin={{ horizontal: "right", vertical: "top" }} >
+        { languages.map(lang => (
+          <MenuItem key={lang.code} onClick={ this.handleMenuClose("anchorLangsMenu") }>
+            <Translate id={`header.lang.${lang.code}`}/>
+          </MenuItem>
+        )) }
+      </Menu>
+
+    </React.Fragment>)
+  }
+
   render() {
-    const { appTitle, submitLinkDialogOpen } = this.state;
+    const { submitLinkDialogOpen } = this.state;
     const { classes } = this.props;
     const user = UserService.currentUser();
 
@@ -198,20 +229,25 @@ class Header extends Component {
       <AppBar className={ classes.appBar }>
         <Toolbar>
           <Typography variant="h6" color="inherit" className={classes.title}>
-            <Link to="/" className={ classes.menuBarText }>{ appTitle }</Link>
+            <Link to="/" className={ classes.menuBarText }>
+              <Translate id="misc.appTitle" />
+            </Link>
           </Typography>
 
           <Button>
             <Link to="/top-vote" className={ classes.menuBarText }>
-              Top Vote
+              <Translate id="header.topVote" />
             </Link>
           </Button>
-          <Button className= { classes.menuBarText } onClick ={ this.openSubmitLinkDialog }>
-            Submit
+
+          <Button className={ classes.menuBarText } onClick ={ this.openSubmitLinkDialog }>
+            <Translate id="header.submit" />
           </Button>
-          { user ?
-            this.renderAccountMenuLoggedIn(user) :
+
+          { user ? this.renderAccountMenuLoggedIn(user) :
             this.renderAccountMenuBeforeLogIn() }
+
+          { this.renderLanguagesMenu() }
         </Toolbar>
       </AppBar>
       <SubmitLink dialogOpen={ submitLinkDialogOpen }
@@ -220,4 +256,4 @@ class Header extends Component {
   }
 }
 
-export default withApollo(withRouter(withStyles(styles)(Header)));
+export default withLocalize(withApollo(withRouter(withStyles(styles)(Header))));

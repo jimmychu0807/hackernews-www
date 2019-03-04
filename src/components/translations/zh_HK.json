@@ -1,0 +1,21 @@
+{
+  "misc": {
+    "loading": "載入中...",
+    "appTitle": "極客新聞"
+  },
+  "header": {
+    "topVote": "最高得票",
+    "submit": "分享",
+    "login": "登入",
+    "profile": "資料頁",
+    "logout": "登出",
+    "lang": {
+      "en": "EN",
+      "zh_HK": "繁中",
+      "zh_CN": "简中"
+    }
+  },
+  "footer": {
+    "main": "由 <a href='https://www.hkwtf.com' className={ classes.emphasis }>WTF 工作室</a> 用 <span role='img' aria-label='love' className={ classes.emoji }>❤️</span> 打造"
+  }
+}
