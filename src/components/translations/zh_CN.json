@@ -1,6 +1,7 @@
 {
   "misc": {
     "loading": "载入中...",
+    "error": "错误 :(",
     "appTitle": "极客新闻"
   },
   "header": {

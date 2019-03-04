@@ -17,6 +17,7 @@ import zhCNTranslation from './translations/zh_CN.json';
 
 import apolloClient from '../services/ApolloClient';
 import Routing from '../services/Routing';
+import LanguageService from '../services/LanguageService';
 
 // --- Components ---
 
@@ -44,12 +45,13 @@ class App extends Component {
       options: {
         renderToStaticMarkup,
         renderInnerHtml: true,
-        defaultLanguage: "en",
+        defaultLanguage: LanguageService.defaultLanguage,
       },
     });
     this.props.addTranslationForLanguage(enTranslation, "en");
     this.props.addTranslationForLanguage(zhHKTranslation, "zh_HK");
     this.props.addTranslationForLanguage(zhCNTranslation, "zh_CN");
+    this.props.setActiveLanguage(LanguageService.getActiveLanguage());
   }
 
   render() {

@@ -1,6 +1,7 @@
 {
   "misc": {
     "loading": "loading...",
+    "error": "Error :(",
     "appTitle": "Hacker News"
   },
   "header": {

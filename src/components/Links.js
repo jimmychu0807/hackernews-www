@@ -9,9 +9,17 @@ import {
   Add as AddIcon
 } from '@material-ui/icons';
 import { withStyles } from '@material-ui/core/styles';
+
+// Multilingual Support
+import { Translate } from 'react-localize-redux';
+
+// app services
 import { LINKS_QUERY_GQL } from './gql';
 import Link from './Link';
 import { getQueryVarsFromParam } from '../services/HelperMethods';
+
+
+// --- Components ---
 
 const styles = theme => ({
   linksList: {
@@ -57,8 +65,8 @@ class Links extends Component {
 
     return(<Query query={LINKS_QUERY_GQL} variables={queryVars}>
       {({ loading, error, data, fetchMore }) => {
-        if (loading) return <p>Loading...</p>;
-        if (error) return <p>Error :(</p>;
+        if (loading) return <p><Translate id="misc.loading" /></p>;
+        if (error) return <p><Translate id="misc.error" /></p>;
 
         const { allLinks: { nodes: links, pageInfo }} = data;
         return(

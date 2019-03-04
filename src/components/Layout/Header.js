@@ -23,6 +23,7 @@ import SubmitLink from '../SubmitLink';
 
 // services
 import UserService from '../../services/UserService';
+import LanguageService from '../../services/LanguageService';
 
 const styles = theme => ({
   appBar: {
@@ -113,9 +114,20 @@ class Header extends Component {
   }
 
   handleLogout = ev => {
+    this.handleMenuClose("anchorAccountMenu")(ev);
+
     UserService.logout();
     this.props.history.push("/");
-    this.handleMenuClose(ev);
+  }
+
+  handleChangeLanguage = langCode => ev => {
+    this.handleMenuClose("anchorLangsMenu")(ev);
+
+    const { setActiveLanguage } = this.props;
+    setActiveLanguage(langCode);
+
+    // Also save it in localStorage
+    LanguageService.setActiveLanguage(langCode);
   }
 
   openSubmitLinkDialog = ev => {
@@ -127,8 +139,8 @@ class Header extends Component {
   }
 
   menuGotoUrl = siteUrl => ev => {
+    this.handleMenuClose("anchorAccountMenu")(ev);
     this.props.history.push(siteUrl);
-    this.handleMenuClose(ev);
   }
 
   // renderSearch = () => {
@@ -197,7 +209,7 @@ class Header extends Component {
   }
 
   renderLanguagesMenu = () => {
-    const { classes, languages, activeLanguage, setActiveLanguage } = this.props;
+    const { classes, languages } = this.props;
     const { anchorLangsMenu } = this.state;
 
     return (<React.Fragment>
@@ -211,7 +223,7 @@ class Header extends Component {
         anchorOrigin={{ horizontal: "right", vertical: "bottom" }}
         transformOrigin={{ horizontal: "right", vertical: "top" }} >
         { languages.map(lang => (
-          <MenuItem key={lang.code} onClick={ this.handleMenuClose("anchorLangsMenu") }>
+          <MenuItem key={lang.code} onClick={ this.handleChangeLanguage(lang.code) }>
             <Translate id={`header.lang.${lang.code}`}/>
           </MenuItem>
         )) }
