@@ -9,7 +9,8 @@ export const SUBMIT_LINK_GQL = gql`mutation submitLink($url: String!, $descripti
 
 export const LINKS_QUERY_GQL = gql`query linksQuery($sortBy: String, $desc: Boolean,
   $first: Int, $after: String) {
-  allLinks(sortBy: $sortBy, desc: $desc, first: $first, after: $after) {
+  allLinks(sortBy: $sortBy, desc: $desc, first: $first, after: $after)
+    @connection(key: "linksQuery", filter: ["sortBy", "desc"]) {
     pageInfo { hasNextPage endCursor }
     nodes {
       id url description votesCount createdAt loginUserVoted

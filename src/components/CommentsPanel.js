@@ -9,11 +9,8 @@ import {
 import { withStyles } from '@material-ui/core/styles';
 
 // services
-import { GET_COMMENTS_GQL, POST_COMMENT_GQL, LINKS_QUERY_GQL } from './gql.js';
+import { GET_COMMENTS_GQL, POST_COMMENT_GQL } from './gql.js';
 import CommentInCommentsPanel from './CommentInCommentsPanel';
-import { getQueryVarsFromParam } from '../services/HelperMethods';
-import { defaultLinksOrder } from '../services/Routing';
-
 
 const styles = theme => ({
   wrapper: {
@@ -40,10 +37,6 @@ class CommentsPanel extends Component {
       query: GET_COMMENTS_GQL,
       variables: { commentableId: props.link.id, levelType: "top_level" },
     }
-    this.linksQueryGqlObj = {
-      query: LINKS_QUERY_GQL,
-      variables: getQueryVarsFromParam(defaultLinksOrder),
-    }
   }
 
   handleInputChange = name => ev => {
@@ -61,7 +54,7 @@ class CommentsPanel extends Component {
     await apolloClient.mutate({
       mutation: POST_COMMENT_GQL,
       variables: { commentableId: link.id, content },
-      refetchQueries: [ this.getCommentsGqlObj, this.linksQueryGqlObj ]
+      refetchQueries: [ this.getCommentsGqlObj ]
     });
 
     this.setState({ content: "" });
