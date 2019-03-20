@@ -17,6 +17,8 @@
     }
   },
   "footer": {
+    "frontend": "前端",
+    "backend": "後端",
     "main": "由 <a href='https://www.hkwtf.com' className={ classes.emphasis }>WTF 工作室</a> 用 <span role='img' aria-label='love' className={ classes.emoji }>❤️</span> 打造"
   }
 }

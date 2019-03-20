@@ -19,6 +19,10 @@ const styles = theme => ({
   emphasis: {
     textDecoration: "none",
     fontWeight: "bold",
+  },
+  left_right_margin: {
+    marginLeft:  theme.spacing.unit,
+    marginRight:  theme.spacing.unit,
   }
 });
 
@@ -32,6 +36,17 @@ class Footer extends Component {
         <hr/>
         <Typography color="textSecondary" align="center" gutterBottom>
           <Translate id="footer.main" />
+          &nbsp;|&nbsp;
+          <span className={ classes.left_right_margin }>
+            <i className="fab fa-github fa-lg fa-fw" />
+          </span>
+          <a href="https://github.com/jimmychu0807/hackernews-www"
+            target="_blank" rel="noopener noreferrer">
+            <Translate id="footer.frontend" /></a>
+          ,&nbsp;
+          <a href="https://github.com/jimmychu0807/hackernews-api"
+            target="_blank" rel="noopener noreferrer">
+            <Translate id="footer.backend" /></a>
         </Typography>
       </footer>
     )

@@ -17,6 +17,8 @@
     }
   },
   "footer": {
+    "frontend": "frontend",
+    "backend": "backend",
     "main": "Built with <span role='img' aria-label='love' className={ classes.emoji }>❤️</span> by <a href='https://www.hkwtf.com' className={ classes.emphasis }>WTF Studio</a>"
   }
 }
