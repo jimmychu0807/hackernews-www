@@ -1,7 +1,6 @@
 #!/usr/bin/env bash
 # set -x
 
-# TP1 & TP2
 USER="jimmychu"
 REMOTE="hackernews.app.hkwtf.com"
 APP_PATH="/var/www/hackernews-www"
