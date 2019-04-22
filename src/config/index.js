@@ -1,7 +1,3 @@
-import * as dotenv from "dotenv"
-
-dotenv.config();
-
 const CONFIG = {
   default: {
     LINKS_PER_PAGE: 25,

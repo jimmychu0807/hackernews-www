@@ -1,12 +1,13 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
+import { LocalizeProvider } from 'react-localize-redux'; // Multilingual Support
 
-// Multilingual Support
-import { LocalizeProvider } from 'react-localize-redux';
-
-import './styles/index.css';
+// own components
 import App from './components/App';
 import * as serviceWorker from './serviceWorker';
+
+// other assets
+import './styles/index.css';
 
 ReactDOM.render(
   <LocalizeProvider>

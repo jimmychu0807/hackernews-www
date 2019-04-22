@@ -15,8 +15,8 @@ import enTranslation from './translations/en.json';
 import zhHKTranslation from './translations/zh_HK.json';
 import zhCNTranslation from './translations/zh_CN.json';
 
+import Routing from './Routing';
 import apolloClient from '../services/ApolloClient';
-import Routing from '../services/Routing';
 import LanguageService from '../services/LanguageService';
 
 // --- Components ---

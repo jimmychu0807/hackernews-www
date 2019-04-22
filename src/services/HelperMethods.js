@@ -1,6 +1,6 @@
 import _ from 'lodash';
 import TimeDiff from 'js-time-diff';
-import CONFIG from '../config/Main';
+import CONFIG from '../config';
 
 export function getQueryVarsFromParam(param, after = null, first = CONFIG.LINKS_PER_PAGE) {
   let res = param.split("-");

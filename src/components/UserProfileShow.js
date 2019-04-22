@@ -1,9 +1,5 @@
 import React from 'react';
 
-class UserProfileShow extends React.Component {
-  render() {
-    return(<h1>User Profile Show</h1>)
-  }
-}
+const UserProfileShow = props => pug`h1 User Profile Show`;
 
 export default UserProfileShow;

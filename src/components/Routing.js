@@ -1,13 +1,13 @@
 import React, { lazy } from 'react';
 import { Switch, Route } from 'react-router-dom';
 
-const MainLayout = lazy(() => import("../components/Layout/MainLayout"));
-const Links = lazy(() => import("../components/Links"));
-const Search = lazy(() => import("../components/Search"));
-const LoginSignup = lazy(() => import("../components/LoginSignup"));
-const UserProfileEdit = lazy(() => import("../components/UserProfileEdit"));
-const UserProfileShow = lazy(() => import("../components/UserProfileShow"));
-const NoMatch = lazy(() => import("../components/NoMatch"));
+const MainLayout = lazy(() => import("./Layout/MainLayout"));
+const Links = lazy(() => import("./Links"));
+const Search = lazy(() => import("./Search"));
+const LoginSignup = lazy(() => import("./LoginSignup"));
+const UserProfileEdit = lazy(() => import("./UserProfileEdit"));
+const UserProfileShow = lazy(() => import("./UserProfileShow"));
+const NoMatch = lazy(() => import("./NoMatch"));
 
 export const defaultLinksOrder = "byCreatedAt-desc"
 

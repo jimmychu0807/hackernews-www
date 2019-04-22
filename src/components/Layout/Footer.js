@@ -26,33 +26,25 @@ const styles = theme => ({
   }
 });
 
-class Footer extends Component {
+const URLS = {
+  frontend: "https://github.com/jimmychu0807/hackernews-www",
+  backend:  "https://github.com/jimmychu0807/hackernews-api",
+};
 
-  render() {
-    let { classes } = this.props;
-
-    return(
-      <footer className={ classes.footer }>
-        <hr/>
-        <Typography color="textSecondary" align="center" gutterBottom>
-          <Translate id="footer.main" />
-          &nbsp;|&nbsp;
-          <span className={ classes.left_right_margin }>
-            <i className="fab fa-github fa-lg fa-fw" />
-          </span>
-          <a href="https://github.com/jimmychu0807/hackernews-www"
-            target="_blank" rel="noopener noreferrer">
-            <Translate id="footer.frontend" /></a>
-          ,&nbsp;
-          <a href="https://github.com/jimmychu0807/hackernews-api"
-            target="_blank" rel="noopener noreferrer">
-            <Translate id="footer.backend" /></a>
-        </Typography>
-      </footer>
-    )
-  }
-
-}
+const Footer = props => pug`
+  - let { classes } = props;
+  footer(className=classes.footer)
+    hr
+    Typography(color='textSecondary' align='center' gutterBottom)
+      Translate(id='footer.main')
+      | &nbsp;|&nbsp;
+      span(className=classes.left_right_margin): i.fab.fa-github.fa-lg.fa-fw
+      each key, ind in Object.keys(URLS)
+        a(href=URLS[key] key=key target="_blank" rel="noopener noreferrer")
+          Translate(id=("footer." + key))
+        if ind !== Object.keys(URL).length - 1
+          = ", "
+`;
 
 export default withStyles(styles)(Footer);
 
