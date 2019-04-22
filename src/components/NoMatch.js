@@ -1,8 +1,6 @@
 // core/data components
 import React from 'react';
 
-export default function(props) {
-  return (
-    <div>Page Not Found</div>
-  )
-}
+const NoMatch = props =>pug`div Page Not Found`;
+
+export default NoMatch;

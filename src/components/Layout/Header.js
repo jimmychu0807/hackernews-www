@@ -143,24 +143,6 @@ class Header extends Component {
     this.props.history.push(siteUrl);
   }
 
-  // renderSearch = () => {
-  //   const { classes } = this.props;
-  //   return(
-  //     <div className={classes.search}>
-  //       <div className={classes.searchIcon}>
-  //         <Icon className="fas fa-fw fa-search" />
-  //       </div>
-  //       <InputBase
-  //         placeholder="Search…"
-  //         classes={{
-  //           root: classes.inputRoot,
-  //           input: classes.inputInput,
-  //         }}
-  //       />
-  //     </div>
-  //   )
-  // }
-
   renderAccountMenuLoggedIn = (user) => {
     let { classes } = this.props;
     let { anchorAccountMenu } = this.state;

@@ -22,23 +22,14 @@ const styles = theme => ({
   },
 });
 
-class MainLayout extends Component {
-  state = { };
-
-  render() {
-    const { classes } = this.props;
-
-    return(
-      <div className = { classes.layout }>
-        <Header />
-        <main className = { classes.mainBody } >
-          { this.props.children }
-        </main>
-        <Footer />
-      </div>
-    )
-  }
-};
+const MainLayout = props =>
+  <div className = { props.classes.layout }>
+    <Header />
+    <main className = { props.classes.mainBody } >
+      { props.children }
+    </main>
+    <Footer />
+  </div>
 
 MainLayout.propTypes = {
   classes: PropTypes.object.isRequired,
