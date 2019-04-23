@@ -19,9 +19,9 @@
     "react-scripts": "2.1.5"
   },
   "scripts": {
-    "start:dev": "PORT=3001 react-app-rewired --inspect start",
-    "build": "NODE_ENV=production react-app-rewired build",
-    "test": "PORT=3001 react-app-rewired test",
+    "start:dev": "PORT=3001 react-scripts --inspect start",
+    "build": "NODE_ENV=production react-scripts build",
+    "test": "PORT=3001 react-scripts test",
     "eject": "react-scripts eject",
     "predeploy": "yarn build",
     "deploy": "./bin/deploy.sh"
@@ -34,10 +34,5 @@
     "not dead",
     "not ie <= 11",
     "not op_mini all"
-  ],
-  "devDependencies": {
-    "babel-plugin-transform-react-pug": "^7.0.0",
-    "customize-cra": "^0.2.12",
-    "react-app-rewired": "^2.1.1"
-  }
+  ]
 }

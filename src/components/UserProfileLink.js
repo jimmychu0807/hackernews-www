@@ -12,10 +12,12 @@ const styles = theme => ({
   }
 });
 
-const UserProfileLink = props => pug`
-  - const { user, classes } = props;
-  Typography(inline component="span" variant="subtitle1")
-    Link(className=classes.userLink to=("/profile/" + user.id))= user.name
-`;
+const UserProfileLink = props =>
+  <Typography inline component="span" variant="subtitle1">
+    <Link className={props.classes.userLink}
+      to={`/profile/${props.user.id}`}>
+      {props.user.name}
+    </Link>
+  </Typography>
 
 export default withStyles(styles)(UserProfileLink);

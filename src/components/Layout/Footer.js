@@ -1,4 +1,4 @@
-import React, { Component } from 'react';
+import React from 'react';
 
 // Styling
 import { Typography } from '@material-ui/core';
@@ -31,20 +31,24 @@ const URLS = {
   backend:  "https://github.com/jimmychu0807/hackernews-api",
 };
 
-const Footer = props => pug`
-  - let { classes } = props;
-  footer(className=classes.footer)
-    hr
-    Typography(color='textSecondary' align='center' gutterBottom)
-      Translate(id='footer.main')
-      | &nbsp;|&nbsp;
-      span(className=classes.left_right_margin): i.fab.fa-github.fa-lg.fa-fw
-      each key, ind in Object.keys(URLS)
-        a(href=URLS[key] key=key target="_blank" rel="noopener noreferrer")
-          Translate(id=("footer." + key))
-        if ind !== Object.keys(URL).length - 1
-          = ", "
-`;
+const Footer = props =>
+  <footer className={props.classes.footer}>
+    <hr/>
+    <Typography color='textSecondary' align='center' gutterBottom>
+      <Translate id='footer.main'/>
+      &nbsp;|&nbsp;
+      <span className={props.classes.left_right_margin}>
+        <i className="fab fa-github fa-lg fa-fw"/>
+      </span>
+      { Object.keys(URLS)
+        .map(k =>
+          <a href={URLS[k]} key={k} target='_blank' rel="noopener noreferrer">
+            <Translate id={`footer.${k}`}/>
+          </a>)
+        .reduce((mem, current, ind) => [ mem, ", ", current ])
+      }
+    </Typography>
+  </footer>
 
 export default withStyles(styles)(Footer);
 
