@@ -9,7 +9,7 @@ import {
 import { withStyles } from '@material-ui/core/styles';
 
 // services
-import { GET_COMMENTS_GQL, POST_COMMENT_GQL } from './gql.js';
+import { GET_COMMENTS_GQL, POST_COMMENT_GQL } from '../services/gql.js';
 import CommentInCommentsPanel from './CommentInCommentsPanel';
 
 const styles = theme => ({

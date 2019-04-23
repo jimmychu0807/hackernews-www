@@ -14,7 +14,7 @@ import { withStyles } from '@material-ui/core/styles';
 import { Translate } from 'react-localize-redux';
 
 // app services
-import { LINKS_QUERY_GQL } from './gql';
+import { LINKS_QUERY_GQL } from '../services/gql';
 import Link from './Link';
 import { getQueryVarsFromParam } from '../services/HelperMethods';
 
@@ -29,11 +29,8 @@ const styles = theme => ({
 });
 
 class Links extends Component {
-  constructor(props) {
-    super(props);
-    this.state = {
-      linkGqlCursorAfter: null
-    }
+  state = {
+    linkGqlCursorAfter: null
   }
 
   fetchNextPage = (pageInfo, fetchMore) => ev => {
@@ -63,32 +60,33 @@ class Links extends Component {
     const { linkGqlCursorAfter: after } = this.state;
     const queryVars = getQueryVarsFromParam(linksOrder, after);
 
-    return(<Query query={LINKS_QUERY_GQL} variables={queryVars}>
-      {({ loading, error, data, fetchMore }) => {
-        if (loading) return <p><Translate id="misc.loading" /></p>;
-        if (error) return <p><Translate id="misc.error" /></p>;
+    return(
+      <Query query={LINKS_QUERY_GQL} variables={queryVars}>
+        {({ loading, error, data, fetchMore }) => {
+          if (loading) return <p><Translate id="misc.loading" /></p>;
+          if (error) return <p><Translate id="misc.error" /></p>;
 
-        const { allLinks: { nodes: links, pageInfo }} = data;
-        return(
-          <React.Fragment>
-            <Grid container spacing={8} className={ classes.linksList } >
-
-              { links.map((link, ind) => (
-                <Grid item key={link.id}><Link ind={ind} link={link}/></Grid>
-              )) }
-
-              { pageInfo.hasNextPage ? (
-                <Grid item key={ "fetchNextPage" } style={{ alignSelf: "center" }}>
-                  <Fab onClick={ this.fetchNextPage(pageInfo, fetchMore) }
-                    size="small" color="secondary"><AddIcon /></Fab>
-                </Grid>)
-                : null }
-
-            </Grid>
-          </React.Fragment>
-        )
-      } }
-    </Query>)
+          const { allLinks: { nodes: links, pageInfo }} = data;
+          return(
+            <React.Fragment>
+              <Grid container spacing={8} className={ classes.linksList } >
+                { links.map((link, ind) =>
+                  <Grid item key={link.id}>
+                    <Link ind={ind} link={link}/>
+                  </Grid>
+                ) }
+                { pageInfo.hasNextPage ? (
+                  <Grid item key={ "fetchNextPage" } style={{ alignSelf: "center" }}>
+                    <Fab onClick={ this.fetchNextPage(pageInfo, fetchMore) }
+                      size="small" color="secondary"><AddIcon /></Fab>
+                  </Grid>)
+                  : null }
+              </Grid>
+            </React.Fragment>
+          )
+        } }
+      </Query>
+    )
   }
 }
 

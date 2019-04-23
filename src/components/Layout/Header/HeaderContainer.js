@@ -6,21 +6,19 @@ import { withApollo } from "react-apollo";
 //app components
 import Header from './Header';
 
+//Multilingual Support
+import { withLocalize } from 'react-localize-redux';
+
 // services
 import UserService from '../../../services/UserService';
 import LanguageService from '../../../services/LanguageService';
 
-
 class HeaderContainer extends Component {
-  constructor(props) {
-    super(props);
-
-    this.state = {
-      anchorAccountMenu: null,
-      anchorLangsMenu: null,
-      submitLinkDialogOpen: false,
-    };
-  }
+  state = {
+    anchorAccountMenu: null,
+    anchorLangsMenu: null,
+    submitLinkDialogOpen: false,
+  };
 
   handleMenuOpen = type => ev => {
     this.setState({ [type]: ev.currentTarget });
@@ -76,4 +74,4 @@ class HeaderContainer extends Component {
   }
 }
 
-export default withApollo(withRouter(HeaderContainer));
+export default withApollo(withLocalize(withRouter(HeaderContainer)));

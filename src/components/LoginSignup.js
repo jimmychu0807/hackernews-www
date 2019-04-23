@@ -13,7 +13,7 @@ import clsx from 'clsx';
 
 // services
 import UserService from '../services/UserService';
-import { LOGIN_GQL, SIGNUP_GQL } from './gql.js';
+import { LOGIN_GQL, SIGNUP_GQL } from '../services/gql.js';
 
 const styles = theme => {
 

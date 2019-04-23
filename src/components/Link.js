@@ -14,7 +14,7 @@ import { grey } from '@material-ui/core/colors';
 import CommentsPanel from './CommentsPanel';
 import UserProfileLink from './UserProfileLink';
 import { getDomainFromLink, timeDiff } from '../services/HelperMethods';
-import { UPVOTE_GQL, CANCEL_UPVOTE_GQL } from './gql.js';
+import { UPVOTE_GQL, CANCEL_UPVOTE_GQL } from '../services/gql.js';
 
 const styles = theme => ({
   one_link: {

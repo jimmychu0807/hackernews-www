@@ -3,7 +3,6 @@ import { Switch, Route } from 'react-router-dom';
 
 const MainLayout = lazy(() => import("./Layout"));
 const Links = lazy(() => import("./Links"));
-const Search = lazy(() => import("./Search"));
 const LoginSignup = lazy(() => import("./LoginSignup"));
 const UserProfileEdit = lazy(() => import("./UserProfileEdit"));
 const UserProfileShow = lazy(() => import("./UserProfileShow"));
@@ -18,9 +17,6 @@ const Routing = props =>
     }/>
     <Route exact path="/top-vote" render={ props =>
       <MainLayout><Links {...props} linksOrder="byVotesCount-desc"/></MainLayout>
-    }/>
-    <Route exact path="/search" render={ props =>
-      <MainLayout><Search defaultLinksOrder={ defaultLinksOrder }/></MainLayout>
     }/>
     <Route exact path="/login" render={ props =>
       <MainLayout><LoginSignup {...props} displayType="login"/></MainLayout>

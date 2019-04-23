@@ -11,7 +11,7 @@ import {
 import { withStyles } from '@material-ui/core/styles';
 
 // app libraries
-import { SUBMIT_LINK_GQL, LINKS_QUERY_GQL } from './gql';
+import { SUBMIT_LINK_GQL, LINKS_QUERY_GQL } from '../services/gql';
 import { defaultLinksOrder } from './Routing';
 import { getQueryVarsFromParam } from '../services/HelperMethods';
 
