@@ -1,6 +1,4 @@
-// core/data components
-import React, { Component } from 'react';
-import { withApollo } from "react-apollo";
+import React from 'react';
 
 // Styling components
 import {
@@ -11,10 +9,9 @@ import clsx from 'clsx';
 import { grey } from '@material-ui/core/colors';
 
 // Our own services
-import CommentsPanel from './CommentsPanel';
-import UserProfileLink from './UserProfileLink';
-import { getDomainFromLink, timeDiff } from '../services/HelperMethods';
-import { UPVOTE_GQL, CANCEL_UPVOTE_GQL } from '../services/gql.js';
+import { getDomainFromLink, timeDiff } from '../../services/HelperMethods';
+import CommentsPanel from '../CommentsPanel';
+import UserProfileLink from '../UserProfileLink';
 
 const styles = theme => ({
   one_link: {
@@ -64,46 +61,20 @@ const styles = theme => ({
   },
 });
 
-class Link extends Component {
+const Link = props => {
+  const { ind, link, classes, renderActionBtnType, commentsPanelEverOpen,
+    commentsExpanded } = props;
+  const upvoted = (renderActionBtnType === "cancelUpvoteBtn");
+  const linkOwner = link.submitter;
+  const domain = getDomainFromLink(link.url);
 
-  constructor(props) {
-    super(props);
-    const { link } = this.props;
-    this.state = {
-      renderActionBtnType: (link.loginUserVoted ? "cancelUpvoteBtn" : "upvoteBtn"),
-      commentsPanelEverOpen: false,
-      commentsExpanded: false,
-    };
-  }
-
-  handleVoting = upvoted => async ev => {
-    const { client: apolloClient, link: { id: linkId } } = this.props;
-    const mutation = upvoted ? CANCEL_UPVOTE_GQL : UPVOTE_GQL
-    await apolloClient.mutate({ mutation, variables: { linkId }});
-
-    // Update the internal state
-    this.setState({ renderActionBtnType: upvoted ? "upvoteBtn" : "cancelUpvoteBtn" });
-  }
-
-  handleToggleCommentPanel = ev => {
-    let { commentsExpanded } = this.state;
-    commentsExpanded = !commentsExpanded;
-    this.setState({ commentsExpanded, commentsPanelEverOpen: true });
-  }
-
-  render() {
-    const { ind, link, classes } = this.props;
-    const { renderActionBtnType, commentsPanelEverOpen, commentsExpanded } = this.state;
-    const upvoted = (renderActionBtnType === "cancelUpvoteBtn");
-    const linkOwner = link.submitter;
-    const domain = getDomainFromLink(link.url);
-
-    return (<Paper className={ classes.one_link }>
+  return(
+    <Paper className={ classes.one_link }>
       <Grid container spacing={8} className={ classes.linkContainer }>
         <Grid item>
           {/* Voting button */}
           <Button className={ clsx(classes.voteBtn, upvoted ? 'upvoted' : 'normal') }
-            onClick={ this.handleVoting(upvoted) }>
+            onClick={ props.handleVoting(upvoted) }>
             <i className={ clsx(classes.btn_icon, "far fa-thumbs-up fa-fw fa-lg") } />
             <Typography variant="button">{ link.votesCount }</Typography>
           </Button>
@@ -137,19 +108,21 @@ class Link extends Component {
 
         <Grid item>
           {/* Comment button */}
-          <Button color="secondary" onClick={ this.handleToggleCommentPanel }>
+          <Button color="secondary" onClick={ props.handleToggleCommentPanel }>
             <i className={ clsx(classes.btn_icon, "far fa-comments fa-fw fa-lg") } />
             <Typography variant="button" color="secondary">{ link.commentsCount }</Typography>
           </Button>
         </Grid>
+
       </Grid>
+
       <ExpansionPanel expanded={ commentsExpanded } style={{ display: commentsExpanded ? "block" : "none" }}>
         <ExpansionPanelDetails>
           <CommentsPanel link={ link } commentsPanelEverOpen={ commentsPanelEverOpen } />
         </ExpansionPanelDetails>
       </ExpansionPanel>
-    </Paper>)
-  }
+    </Paper>
+  );
 }
 
-export default withApollo(withStyles(styles)(Link));
+export default withStyles(styles)(Link)
