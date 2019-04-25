@@ -17,7 +17,7 @@ import { Language as LanguageIcon } from '@material-ui/icons';
 import clsx from 'clsx';
 
 //Multilingual Support
-import { withLocalize, Translate } from 'react-localize-redux';
+import { Translate } from 'react-localize-redux';
 
 // app components
 import SubmitLink from '../../SubmitLink';
@@ -202,5 +202,5 @@ const Header = props => {
 }
 
 export default compose(
-  withLocalize, withStyles(styles)
+  withStyles(styles)
 )(Header);

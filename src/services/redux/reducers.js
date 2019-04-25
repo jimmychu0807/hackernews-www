@@ -12,16 +12,15 @@ const DEFAULT_APP_STATE = {
 const DEFAULT_THREAD_STATE = [];
 
 function appReducer(state = DEFAULT_APP_STATE, action) {
-
-  let email = null
-  if (action.payload) ({ email } = action.payload);
-
   switch (action.type) {
     case USER_LOGIN:
-      return Object.assign({}, state, { login: email });
+      return Object.assign({}, state, { login: action.payload.email });
+
     case USER_LOGOUT:
       return Object.assign({}, state, { login: null });
-    default: return state;
+
+    default:
+      return state;
   }
 }
 

@@ -9,6 +9,13 @@ const DEFAULT_LANGUAGE = "en";
 
 const LanguageService = {
   initializeAppProps(props) {
+    let currentCode = null;
+    try {
+      currentCode = localStorage.getItem('langCode') || DEFAULT_LANGUAGE;
+    } catch (err) {
+      currentCode = DEFAULT_LANGUAGE;
+    }
+
     props.initialize({
       languages: [
         { name: "English", code: "en" },
@@ -25,7 +32,7 @@ const LanguageService = {
     props.addTranslationForLanguage(enTranslation, "en");
     props.addTranslationForLanguage(zhHKTranslation, "zh_HK");
     props.addTranslationForLanguage(zhCNTranslation, "zh_CN");
-    props.setActiveLanguage(DEFAULT_LANGUAGE);
+    props.setActiveLanguage(currentCode);
   }
 }
 

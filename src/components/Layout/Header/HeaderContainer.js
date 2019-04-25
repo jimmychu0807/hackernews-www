@@ -11,7 +11,7 @@ import { connect } from "react-redux";
 import Header from './Header';
 
 //Multilingual Support
-import { withLocalize, getActiveLanguage, getLanguages } from 'react-localize-redux';
+import { withLocalize, getLanguages, getActiveLanguage } from 'react-localize-redux';
 
 // services
 import UserService from '../../../services/UserService';
@@ -40,9 +40,7 @@ class HeaderContainer extends Component {
 
   handleChangeLanguage = langCode => ev => {
     this.handleMenuClose("anchorLangsMenu")(ev);
-
-    const { setActiveLanguage } = this.props;
-    setActiveLanguage(langCode);
+    this.props.setActiveLanguage(langCode);
   }
 
   openSubmitLinkDialog = ev => {
@@ -68,6 +66,8 @@ class HeaderContainer extends Component {
         menuGotoUrl =           { this.menuGotoUrl }
         handleChangeLanguage =  { this.handleChangeLanguage }
         closeSubmitLinkDialog = { this.closeSubmitLinkDialog }
+        currentLanguage =       { this.props.currentLanguage }
+        languages =             { this.props.languages }
         { ...this.state }
       />
     );
