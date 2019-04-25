@@ -1,19 +1,16 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
-import { LocalizeProvider } from 'react-localize-redux'; // Multilingual Support
 
 // own components
 import App from './components/App';
+import Providers from './components/Providers';
 import * as serviceWorker from './serviceWorker';
 
 // other assets
 import './styles/index.css';
 
-ReactDOM.render(
-  <LocalizeProvider>
-    <App />
-  </LocalizeProvider>
-  , document.getElementById('root'));
+ReactDOM.render(<Providers><App /></Providers>,
+  document.getElementById('root'));
 
 // If you want your app to work offline and load faster, you can change
 // unregister() to register() below. Note this comes with some pitfalls.

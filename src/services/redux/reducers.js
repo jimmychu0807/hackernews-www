@@ -1,4 +1,6 @@
-import { combineReducers } from 'redux'
+import { combineReducers } from 'redux';
+import { localizeReducer } from "react-localize-redux";
+
 import {
   USER_LOGIN, USER_LOGOUT, CHANGE_LANG
 } from './actions';
@@ -32,7 +34,8 @@ function threadReducer(state = DEFAULT_THREAD_STATE, action) {
 
 const rootReducer = combineReducers({
   app: appReducer,
-  threads: threadReducer
+  threads: threadReducer,
+  localize: localizeReducer,
 });
 
 export default rootReducer;
