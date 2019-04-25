@@ -29,7 +29,6 @@
 ***/
 export const USER_LOGIN   = 'USER_LOGIN';
 export const USER_LOGOUT  = 'USER_LOGOUT';
-export const CHANGE_LANG  = 'CHANGE_LANG';
 
 export function userLogin(email, password) {
   return {
@@ -42,12 +41,5 @@ export function userLogout() {
   return {
     type: USER_LOGOUT,
     payload: null,
-  }
-}
-
-export function changeLang(lang) {
-  return {
-    type: CHANGE_LANG,
-    payload: { lang },
   }
 }

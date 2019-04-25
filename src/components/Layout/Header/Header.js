@@ -2,6 +2,9 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
 
+// redux-helper
+import { compose } from 'redux';
+
 // styling components
 import {
   AppBar, Toolbar, Typography, Button, IconButton, Menu,
@@ -198,4 +201,6 @@ const Header = props => {
   );
 }
 
-export default withLocalize(withStyles(styles)(Header));
+export default compose(
+  withLocalize, withStyles(styles)
+)(Header);

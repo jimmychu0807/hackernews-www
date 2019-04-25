@@ -3,15 +3,18 @@ import React, { Component } from 'react';
 import { withRouter } from 'react-router-dom';
 import { withApollo } from "react-apollo";
 
+// redux and actions
+import { compose } from 'redux';
+import { connect } from "react-redux";
+
 //app components
 import Header from './Header';
 
 //Multilingual Support
-import { withLocalize } from 'react-localize-redux';
+import { withLocalize, getActiveLanguage, getLanguages } from 'react-localize-redux';
 
 // services
 import UserService from '../../../services/UserService';
-import LanguageService from '../../../services/LanguageService';
 
 class HeaderContainer extends Component {
   state = {
@@ -40,9 +43,6 @@ class HeaderContainer extends Component {
 
     const { setActiveLanguage } = this.props;
     setActiveLanguage(langCode);
-
-    // Also save it in localStorage
-    LanguageService.setActiveLanguage(langCode);
   }
 
   openSubmitLinkDialog = ev => {
@@ -74,4 +74,11 @@ class HeaderContainer extends Component {
   }
 }
 
-export default withApollo(withLocalize(withRouter(HeaderContainer)));
+const mapStateToProps = state => ({
+  currentLanguage: getActiveLanguage(state.localize).code,
+  languages: getLanguages(state.localize),
+});
+
+export default compose(
+  connect(mapStateToProps), withApollo, withLocalize, withRouter
+)(HeaderContainer);

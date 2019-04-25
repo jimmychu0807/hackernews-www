@@ -5,18 +5,9 @@ import enTranslation from './translations/en.json';
 import zhHKTranslation from './translations/zh_HK.json';
 import zhCNTranslation from './translations/zh_CN.json';
 
+const DEFAULT_LANGUAGE = "en";
+
 const LanguageService = {
-
-  defaultLanguage: "en",
-
-  setActiveLanguage (langCode) {
-    localStorage.setItem('langCode', langCode);
-  },
-
-  getActiveLanguage () {
-    return (localStorage.getItem('langCode') || this.defaultLanguage);
-  },
-
   initializeAppProps(props) {
     props.initialize({
       languages: [
@@ -27,14 +18,14 @@ const LanguageService = {
       options: {
         renderToStaticMarkup,
         renderInnerHtml: true,
-        defaultLanguage: LanguageService.defaultLanguage,
+        defaultLanguage: DEFAULT_LANGUAGE,
       },
     });
 
     props.addTranslationForLanguage(enTranslation, "en");
     props.addTranslationForLanguage(zhHKTranslation, "zh_HK");
     props.addTranslationForLanguage(zhCNTranslation, "zh_CN");
-    props.setActiveLanguage(this.getActiveLanguage());
+    props.setActiveLanguage(DEFAULT_LANGUAGE);
   }
 }
 
