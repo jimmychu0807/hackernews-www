@@ -3,7 +3,6 @@
   state: {
     app: {
       login:
-      lang:
     },
     threads: [ {
       subject:
